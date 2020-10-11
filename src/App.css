@@ -3,14 +3,8 @@
 }
 
 .App-logo {
+  animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .App-header {
@@ -28,11 +22,302 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.container-fluid {
+  display: flex;
+  flex-direction: column;
 }
+
+
+/*specification*/
+
+body {
+    font-size: 18px;
+}
+
+h1, h2, h3, h4, h5, label {
+    font-family: 'Georgia';
+    font-weight: 700;
+    color: #fff;
+    margin-top: 0;
+}
+
+ul, li {
+    font-family: 'Georgia';
+    color: #ffffff;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+p {
+    font-family: Arial;
+    font-weight: 300;
+    color: #fff;
+    font-size: 14px;
+    text-align: justify;
+}
+
+input[type=text], input[type=password],  input[type=email], select, select.field1, textarea {
+    font-family: Arial;
+    width: 100%;
+    padding: 6px 10px;
+    margin: 4px 0;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+option {
+    font-family: Arial;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+button {
+    font-family: 'Georgia';
+    margin: 8px 0;
+    color: white;
+    padding: 7px 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.blackHeader {
+    color: #000000;
+    margin-top: 0;
+}
+
+.mylink, .mylink:hover, .NavLink{
+    color: #ffffff
+}
+
+
+/*header*/
+
+.header {
+    padding-top: 10px;
+    background-color: #fff;
+}
+
+.logo {
+    margin: 0 40px;
+    width: 80px;
+    overflow: hidden;
+}
+
+.menu__panel {
+    margin-top:8px;
+    background-color: #2D2D2D;
+    position: sticky;
+}
+
+.menu {
+    margin-top:4px;
+    margin-bottom:4px;
+    justify-content: start;
+    color: #fff;
+    padding: 10px 0;
+}
+
+.menu__item {
+    margin: 0 40px;
+    font-size: 16px;
+    font-weight:700;
+    color: #fff;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu a:hover{
+    color: white;
+}
+
+link {
+    color: #fff;
+}
+
+/*login*/
+
+.login__panel {
+    background-image: url("./images/home.jpg");
+    background-color: #cccccc;
+    height: 800px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.offer {
+    margin-top: 130px;
+    margin-left: 70px;
+}
+
+.offer__title {
+  color: #fff
+}
+
+.offer__text {
+    margin-top:15px;
+    width: 400px;
+}
+
+.login__form {
+    background: rgba(255,255,255,.5);
+    display: block;
+    margin: 50px 50px 50px 0px;
+    padding: 15px;
+    justify-content: flex-end;
+}
+
+.btn__req {
+    font-family: 'Georgia';
+    margin: 8px 0;
+    background: #7B2E31;
+}
+
+.btn__signin {
+    font-family: 'Georgia';
+    margin: 8px 0;
+    background: #E74E2F;
+}
+
+/* about us */
+
+.about__us {
+    background-color: #000;
+}
+
+.description {
+    margin: 200px 70px;
+}
+
+.img__style {
+    margin-top: 30px;
+    width: 800px;
+}
+
+/* Request */
+
+.request {
+    background-color: #000;
+    padding-top: 100px;
+    padding-bottom:70px;
+    text-align: center;
+}
+
+.request__text {
+    margin: 10px auto;
+    text-align: center;
+    width: 540px
+}
+
+.request__title {
+  color: #fff
+}
+
+.request__form {
+  max-width: 540px
+}
+
+.btn__makereq {
+    background: #E74E2F;
+    width: 40%;
+    font-family: Georgia;
+    /*font-size: 22px;*/
+    margin-top: 30px;
+}
+
+.req__input {
+    font-size: 14px;
+    /*width: 70%;*/
+    padding: 4px 4px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+
+/* Footer */
+
+.footer {
+    background: #2D2D2D;
+    padding: 50px 0 94px;
+}
+
+.credits {
+    font-family: 'Georgia';
+    color: #fff;
+    font-size: 16px;
+    width: 184px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/*Icons*/
+
+
+/* Media queries */
+
+@media screen and (max-width: 992px) {
+    .logo {
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 30px;
+    }
+    .menu {
+        justify-content: center;
+    }
+    .offer, .description{
+        text-align: center;
+        margin-left: 0;
+    }
+    .offer__text, .request__text {
+        margin: 20px auto;
+        width: auto;
+        text-align: center;
+    }
+    .login__form {
+        background: rgba(255, 255, 255,.5);
+        margin: auto;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .title__text {
+        width: auto;
+    }
+    .img__style {
+        justify-content: center;
+        margin-top: 10px;
+        width: 600px;
+    }
+    .request__form {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .menu {
+        flex-direction: column;
+        justify-content: center;
+    }
+    .login__form {
+        background: rgba(255, 255, 255,.7);
+        justify-content: center;
+        margin: auto;
+        margin-bottom: 20px;
+    }
+    .menu__item {
+        text-align: center;
+        margin-bottom:10px;
+    }
+    .img__style {
+        visibility: hidden;
+    }
+}
+
+
+

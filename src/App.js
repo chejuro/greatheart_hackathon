@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import Home from './components/Home';
+import RegistrationForm from './components/Landing/RegistrationForm';
+import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    }
+  }
+
+  componentDidMount() {
+
+  }
+
+  render() {
+    return (
+      <CookiesProvider>
+        <Switch>
+              <Route path="/signup" component={RegistrationForm}/>
+              <Route path="/" render={(props) => <Home onLogin={this.handleLogin} {...props} />} />
+            </Switch>
+      </CookiesProvider>
+    )
+  }
 }
 
-export default App;
+export default withRouter(App);
