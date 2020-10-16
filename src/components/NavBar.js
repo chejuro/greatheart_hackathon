@@ -5,7 +5,7 @@ import { HashLink } from 'react-router-hash-link';
 
 
 class NavBar extends Component {
-
+    
     render() {
 
         if (this.props.hash){

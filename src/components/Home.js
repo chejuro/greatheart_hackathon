@@ -11,7 +11,6 @@ class Home extends Component {
     }
 
     render() {
-
             const header = 
             <header id="header" className="header sticky-top">
                 <div className="container-fluid" >
@@ -32,9 +31,6 @@ class Home extends Component {
                     <AboutSection />
                 </div>
             </section>;
-
-
-            
 
             return (
             <body>
