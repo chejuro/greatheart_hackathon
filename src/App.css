@@ -201,6 +201,12 @@ link {
     width: 800px;
 }
 
+/* Kanban table */
+.boardContainer {
+    background-color: '#eee';
+    padding: '30px 20px';
+}
+
 /* Request */
 
 .request {
