@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
 import Board from 'react-trello'
 import data from './data.json';
-import './../App.css';
+import './../../App.css';
 
 
 class KanbanTable extends Component {
@@ -32,7 +31,7 @@ class KanbanTable extends Component {
     console.log(`cardId: ${cardId}`)
     console.log(`metadata: ${metadata}`)
     console.log(`laneId: ${laneId}`)
-    this.props.history.push('/');
+    this.props.history.push(`/card/${cardId}`);
   }
 
   componentDidMount() {
@@ -49,12 +48,14 @@ class KanbanTable extends Component {
     return (
       <div className="boardContainer">
         <Board 
-        //editable
+        style={{backgroundColor: '#eee'}}
+        editable
         data={data} 
         draggable
         handleDragStart={this.handleDragStart}
         handleDragEnd={this.handleDragEnd}
         onCardClick={this.onCardClick}
+        
         />
       </div>
     );

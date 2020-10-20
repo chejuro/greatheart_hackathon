@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import './App.css';
 import Home from './components/Home';
 import RegistrationForm from './components/Landing/RegistrationForm';
-import KanbanTable from './components/KanbanTable';
+import KanbanTable from './components/User/KanbanTable';
+import CardPage from './components/User/CardPage';
 import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 
@@ -25,6 +26,7 @@ class App extends Component {
     return (
       <CookiesProvider>
         <Switch>
+          <Route path="/card" component={CardPage}/>
           <Route path="/kanban" component={KanbanTable}/>
           <Route path="/signup" component={RegistrationForm}/>
           <Route path="/" render={(props) => <Home onLogin={this.handleLogin} {...props} />} />
