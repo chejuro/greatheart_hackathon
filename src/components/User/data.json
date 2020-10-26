@@ -2,7 +2,7 @@
     "lanes": [
       {
         "id": "NEW",
-        "title": "Новый",
+        "title": "НовыйNew",
         "label": "20/70",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "cards": [

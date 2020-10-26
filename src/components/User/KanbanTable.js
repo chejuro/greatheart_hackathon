@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Board from 'react-trello'
-import data from './data.json';
+import template from './data.json';
 import './../../App.css';
+import {getRequests, getKanbanTableData} from './../../utils/UtilsAPI'
 
 
 class KanbanTable extends Component {
@@ -9,7 +10,8 @@ class KanbanTable extends Component {
     super(props);
     this.state = {
       modal: false,
-      data: {}
+      data: {},
+      template: template,
     };
   }
 
@@ -35,13 +37,16 @@ class KanbanTable extends Component {
   }
 
   componentDidMount() {
-    // getKanbanBoardData()
-    //     .then(response => {
-    //         this.setState({
-    //             data: response
-    //     })
-    //     console.log(this.state.data);
-    // });
+    getKanbanTableData()
+      .then(response => {
+          this.setState({
+              data: response
+      })
+      console.log(this.state.data);
+      console.log(this.state.template);
+      this.state.template.lanes[0].title = this.state.data[0].statusInfo.rusName
+      // template.lanes[0] = this.state.data[0]
+    });
   }
 
   render() {
@@ -50,7 +55,7 @@ class KanbanTable extends Component {
         <Board 
         style={{backgroundColor: '#eee'}}
         editable
-        data={data} 
+        data={template} 
         draggable
         handleDragStart={this.handleDragStart}
         handleDragEnd={this.handleDragEnd}
