@@ -19,16 +19,34 @@ const request = (options) => {
     );
 };
 
-export function getRequests(id) {
+export function getRequests() {
     return request({
         url: "requests/ward?status=1",
         method : 'GET'
     });
 }
 
-export function getKanbanTableData(id) {
+export function getKanbanTableData() {
     return request({
         url: "requests/ward",
         method : 'GET'
+    });
+}
+
+export function changeRequestStatus(modifiedData) {
+    console.log(JSON.stringify(modifiedData))
+    return request({
+        url: "requests/ward/change_status",
+        method: 'POST',
+        body: JSON.stringify(modifiedData)
+    });
+}
+
+export function addCard(modifiedData) {
+    console.log(JSON.stringify(modifiedData))
+    return request({
+        url: "/requests/ward/c>reate",
+        method: 'POST',
+        body: JSON.stringify(modifiedData)
     });
 }

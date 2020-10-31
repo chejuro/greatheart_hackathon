@@ -2,24 +2,11 @@
     "lanes": [
       {
         "id": "NEW",
-        "title": "НовыйNew",
+        "title": "Новый",
         "label": "20/70",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "cards": [
-          {
-            "id": "New1",
-            "title": "Новый1",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          },
-          {
-            "id": "New2",
-            "title": "Новый2",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          }
+
         ]
       },
       {
@@ -28,13 +15,7 @@
         "label": "10/20",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "cards": [
-          {
-            "id": "Confirmed1",
-            "title": "Оформлен1",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          }
+
         ]
       },
       {
@@ -43,13 +24,7 @@
         "label": "0/0",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "cards": [
-          {
-            "id": "For_execution1",
-            "title": "К исполнению1",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          }
+
         ]
       },
       {
@@ -58,13 +33,7 @@
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "label": "2/5",
         "cards": [
-          {
-            "id": "In_work1",
-            "title": "В работе1",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          }
+
         ]
       },
       {
@@ -73,13 +42,7 @@
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "label": "1/1",
         "cards": [
-          {
-            "id": "Completed1",
-            "title": "Выполнен1",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          }
+
         ]
       },
       {
@@ -88,13 +51,7 @@
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "label": "1/1",
         "cards": [
-          {
-            "id": "Completed1",
-            "title": "Закрыт1",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          }
+
         ]
       },
       {
@@ -103,13 +60,7 @@
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "label": "1/1",
         "cards": [
-          {
-            "id": "Canceled1",
-            "title": "Отказан1",
-            "label": "15 mins",
-            "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
-            "description": "bla-bla-bla"
-          }
+          
         ]
       }
     ]

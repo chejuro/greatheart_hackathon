@@ -21,15 +21,17 @@ class CardPage extends Component {
   render() {
     return (
         <div className="container-fluid">
-          <h3 className="blackHeader">Карточка</h3>
+          <h3 className="blackHeader">Запрос</h3>
           <Card>
               <div className="row justify-content-around">
                   <div className="col-lg-5">
                     <h4 className="blackHeader">Информация</h4>
                       <Card>
                           <CardBody>
-                              <p className="blackHeader">бла-бла-бла ...</p>
-                              
+                              {/* <p className="blackHeader">бла-бла-бла ...</p> */}
+                              <p className="blackHeader">Имя: Иван</p>
+                              <p className="blackHeader">email: a@a.ru</p>
+                              <p className="blackHeader">Статус: Новый</p>
                           </CardBody>
                       </Card>
                   </div>
@@ -38,7 +40,7 @@ class CardPage extends Component {
                       {/* Комментарии */}
                       <Card>
                           <CardBody>
-                              <p className="blackHeader">бла-бла-бла ...</p>
+                              <p className="blackHeader">Запрос не готов для передачи на исполнение ...</p>
                               
                           </CardBody>
                       </Card>

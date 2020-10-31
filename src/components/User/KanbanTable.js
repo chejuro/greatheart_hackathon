@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import Board from 'react-trello'
-import template from './data.json';
+import board_data from './data.json';
 import './../../App.css';
-import {getRequests, getKanbanTableData} from './../../utils/UtilsAPI'
+import {getRequests, getKanbanTableData, changeRequestStatus,
+        addCard} from './../../utils/UtilsAPI'
+
+
+const cardStyle = { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 }
+const laneStyle = {"width": 280, "backgroundColor": "#2fccc2"}
 
 
 class KanbanTable extends Component {
@@ -10,9 +15,8 @@ class KanbanTable extends Component {
     super(props);
     this.state = {
       modal: false,
-      data: {},
-      template: template,
-    };
+      data: { lanes: [] },
+    }
   }
 
   handleDragStart = (cardId, laneId) => {
@@ -22,10 +26,16 @@ class KanbanTable extends Component {
   }
 
   handleDragEnd = (cardId, sourceLaneId, targetLaneId) => {
+    changeRequestStatus({requestId: Number(cardId), status: Number(targetLaneId)})
     console.log('drag ended')
     console.log(`cardId: ${cardId}`)
     console.log(`sourceLaneId: ${sourceLaneId}`)
     console.log(`targetLaneId: ${targetLaneId}`)
+  }
+
+  handleCardAdd = (card, laneId) => {
+    console.log(`New card added to lane ${laneId}`)
+    console.log(card.title)
   }
 
   onCardClick = (cardId, metadata, laneId) => {
@@ -36,16 +46,32 @@ class KanbanTable extends Component {
     this.props.history.push(`/card/${cardId}`);
   }
 
+  modifyResponse(response) {
+    console.log(response);
+    for (var i = 0; i < response.length; i++) {
+      board_data.lanes[i].id = response[i].statusInfo.id.toString()
+      board_data.lanes[i].title = response[i].statusInfo.rusName
+      board_data.lanes[i].style = laneStyle
+      for (var j = 0; j < response[i].requests.length; j++) {
+        board_data.lanes[i].cards[j] = {
+          "id": response[i].requests[j].id.toString(),
+          "title": response[i].requests[j].name,
+          "cardStyle": cardStyle,
+          "description": response[i].requests[j].body
+        }
+      }
+    }
+    return board_data
+  }
+
   componentDidMount() {
+    
     getKanbanTableData()
       .then(response => {
           this.setState({
-              data: response
+              data: this.modifyResponse(response),
       })
       console.log(this.state.data);
-      console.log(this.state.template);
-      this.state.template.lanes[0].title = this.state.data[0].statusInfo.rusName
-      // template.lanes[0] = this.state.data[0]
     });
   }
 
@@ -55,12 +81,12 @@ class KanbanTable extends Component {
         <Board 
         style={{backgroundColor: '#eee'}}
         editable
-        data={template} 
+        onCardAdd={this.handleCardAdd}
+        data={this.state.data}
         draggable
         handleDragStart={this.handleDragStart}
         handleDragEnd={this.handleDragEnd}
         onCardClick={this.onCardClick}
-        
         />
       </div>
     );
