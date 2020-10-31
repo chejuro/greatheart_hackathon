@@ -65,7 +65,6 @@ class KanbanTable extends Component {
   }
 
   componentDidMount() {
-    
     getKanbanTableData()
       .then(response => {
           this.setState({

@@ -28,7 +28,7 @@ export function getRequests() {
 
 export function getKanbanTableData() {
     return request({
-        url: "requests/ward",
+        url: "requests?requestTypeId=5",
         method : 'GET'
     });
 }
@@ -36,7 +36,7 @@ export function getKanbanTableData() {
 export function changeRequestStatus(modifiedData) {
     console.log(JSON.stringify(modifiedData))
     return request({
-        url: "requests/ward/change_status",
+        url: "requests/change_status",
         method: 'POST',
         body: JSON.stringify(modifiedData)
     });
