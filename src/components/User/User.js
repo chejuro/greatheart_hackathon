@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Router, Route, NavLink, HashRouter } from 'react-router-dom';
+import { Router, Route, NavLink, HashRouter, Link } from 'react-router-dom';
 import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import UserMenuPanel from './UserMenuPanel';
 import NavBar from './../NavBar';
@@ -46,40 +46,38 @@ class User extends Component {
             </Main>;
         
     	return (
-            <HashRouter>
-                <div>
-                    <SideNav  style={{ position: 'fixed', zIndex: '1500'}} onToggle={this.onToggle}>
-                        <SideNav.Toggle />
-                        <SideNav.Nav defaultSelected="kanban">
-                            <NavItem eventKey="kanban">
-                                <NavIcon>
-                                    <NavLink exact to="/kanban"><i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} /></NavLink>
-                                </NavIcon>
-                                <NavText>
-                                    <NavLink exact to="/kanban">Трекер запросов</NavLink>
-                                </NavText>
-                            </NavItem>
-                            <NavItem eventKey="catalog">
-                                <NavIcon>
-                                    <NavLink exact to="/catalog"><i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} /></NavLink>
-                                </NavIcon>
-                                <NavText>
-                                    <NavLink exact to="/catalog"><MyLink expanded={expanded}>Справочники</MyLink></NavLink>
-                                </NavText>
-                            </NavItem>
-                            <NavItem eventKey="help">
-                                <NavIcon>
-                                    <NavLink to="/help"><i className="fa fa-fw fa-question-circle" style={{ fontSize: '1.75em' }} /></NavLink>
-                                </NavIcon>
-                                <NavText>
-                                    <NavLink to="/help">Связь с поддержкой</NavLink>
-                                </NavText>
-                            </NavItem>
-                        </SideNav.Nav>
-                    </SideNav>
-                    {loggedMain}
-                </div>
-            </HashRouter>
+            <div>
+                <SideNav  style={{ position: 'fixed', zIndex: '1500'}} onToggle={this.onToggle}>
+                    <SideNav.Toggle />
+                    <SideNav.Nav defaultSelected="kanban">
+                        <NavItem eventKey="kanban">
+                            <NavIcon>
+                                <NavLink exact to="/kanban"><i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} /></NavLink>
+                            </NavIcon>
+                            <NavText>
+                                <NavLink exact to="/kanban">Трекер запросов</NavLink>
+                            </NavText>
+                        </NavItem>
+                        <NavItem eventKey="catalog">
+                            <NavIcon>
+                                <NavLink exact to="/catalog"><i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} /></NavLink>
+                            </NavIcon>
+                            <NavText>
+                                <NavLink exact to="/catalog"><MyLink expanded={expanded}>Справочники</MyLink></NavLink>
+                            </NavText>
+                        </NavItem>
+                        <NavItem eventKey="help">
+                            <NavIcon>
+                                <NavLink to="/help"><i className="fa fa-fw fa-question-circle" style={{ fontSize: '1.75em' }} /></NavLink>
+                            </NavIcon>
+                            <NavText>
+                                <NavLink to="/help">Связь с поддержкой</NavLink>
+                            </NavText>
+                        </NavItem>
+                    </SideNav.Nav>
+                </SideNav>
+                {loggedMain}
+            </div>
         );
     }
 }

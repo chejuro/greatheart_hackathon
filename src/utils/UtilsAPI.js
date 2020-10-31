@@ -19,6 +19,17 @@ const request = (options) => {
     );
 };
 
+const request_without_response = (options) => {
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+    })
+
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+
+    fetch(options.url, options)
+};
+
 export function getRequests() {
     return request({
         url: "requests/ward?status=1",
@@ -35,7 +46,7 @@ export function getKanbanTableData() {
 
 export function changeRequestStatus(modifiedData) {
     console.log(JSON.stringify(modifiedData))
-    return request({
+    return request_without_response({
         url: "requests/change_status",
         method: 'POST',
         body: JSON.stringify(modifiedData)

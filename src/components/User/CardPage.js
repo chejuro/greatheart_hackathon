@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Card, CardTitle, CardImg, CardBody, Col, Row } from 'reactstrap';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Field } from 'react-final-form-html5-validation'
 import './../../css/User.css';
 import './../../App.css';
 
@@ -12,11 +14,20 @@ class CardPage extends Component {
         modal: false,
         data: {}
     };
+
+    this.toggle = this.toggle.bind(this);
   }
 
   componentDidMount() {
 
   }
+
+  toggle() {
+    this.setState(prevState => ({
+        modal: !prevState.modal
+    }));
+    console.log(this.state.modal)
+}
 
   render() {
     return (
@@ -61,6 +72,43 @@ class CardPage extends Component {
                   </div>
               </div>
           </Card>
+          <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Редактировать</button>
+          <Modal isOpen={this.state.modal} toggle={this.toggle}>
+            <ModalHeader  toggle={this.toggle}><h5 className="blackHeader">Редактирование запроса</h5></ModalHeader>
+            <ModalBody>
+                <Form
+                  name={"edit"}
+                  onSubmit={this.onSubmit}
+                  //initialValues={this.state.data}
+                  render={({ handleSubmit}) => (
+                    <form id="editForm" onSubmit={handleSubmit} style={{ padding: 15 }}>
+                        <Field
+                            className="field1"
+                            name={"name"}
+                            type="text"
+                            component="input"
+                            placeholder="Название запроса"
+                        />
+                        <Field
+                            className="field1"
+                            name={"body"}
+                            type="text"
+                            component="input"
+                            placeholder="Описание запроса"
+                        />
+                    </form>
+                  )}
+                />
+            </ModalBody>
+            <ModalFooter>
+                <button className="btn__req" onClick={() =>
+                        {/* document
+                        .getElementById("editForm")
+                        .dispatchEvent(new Event("submit", { cancelable: true })) */}
+                    }>Сохранить</button>
+                <button className="btn__signin" onClick={this.toggle}>Отмена</button>
+            </ModalFooter>
+        </Modal>
       </div>
     );
   }

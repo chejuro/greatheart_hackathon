@@ -18,13 +18,12 @@ class UserMenuPanel extends Component {
 
     toggle() {
         this.setState({
-            // popoverOpen: !this.state.popoverOpen
+            
         });
     }
 
     logout() {
-        // localStorage.removeItem(ACCESS_TOKEN);
-        // localStorage.removeItem(USER_ID);
+
     }
 
     render() {
@@ -33,15 +32,10 @@ class UserMenuPanel extends Component {
                 <div className="sticky-top menu__user">
                         <nav className="d-flex justify-content-end">
                           <ul className="umenu d-flex ">
-                             {/*<li className="menu__item active"><a id="userPopover" type="button"><i className="fa fa-fw fa-user-circle" style={{ fontSize: '1.3em', color: 'white' }} /></a></li>*/}
                              <li className="menu__item" onClick={this.logout}><a href="/"><i className="fa fa-fw fa-sign-out iconhref" style={{ fontSize: '1.3em', color: 'white' }} /></a></li>
                           </ul>
                         </nav>
                 </div>
-                {/*<Popover placement="bottom" isOpen={this.state.popoverOpen} target="userPopover" toggle={this.toggle}>*/}
-                    {/*<PopoverHeader className="blackHeader">{this.props.name}</PopoverHeader>*/}
-                    {/*<PopoverBody>{this.props.status}</PopoverBody>*/}
-                {/*</Popover>*/}
             </div>
         );
     }

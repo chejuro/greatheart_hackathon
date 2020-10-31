@@ -26,7 +26,7 @@ class KanbanTable extends Component {
   }
 
   handleDragEnd = (cardId, sourceLaneId, targetLaneId) => {
-    changeRequestStatus({requestId: Number(cardId), status: Number(targetLaneId)})
+    changeRequestStatus({requestId: cardId, status: targetLaneId})
     console.log('drag ended')
     console.log(`cardId: ${cardId}`)
     console.log(`sourceLaneId: ${sourceLaneId}`)
@@ -79,7 +79,7 @@ class KanbanTable extends Component {
       <div className="boardContainer">
         <Board 
         style={{backgroundColor: '#eee'}}
-        editable
+        //editable
         onCardAdd={this.handleCardAdd}
         data={this.state.data}
         draggable
