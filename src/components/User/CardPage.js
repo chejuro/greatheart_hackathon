@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { Card, CardTitle, CardImg, CardBody, Col, Row } from 'reactstrap';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Field } from 'react-final-form-html5-validation'
+import {getRequestData} from './../../utils/UtilsAPI'
 import './../../css/User.css';
 import './../../App.css';
 
@@ -19,7 +18,15 @@ class CardPage extends Component {
   }
 
   componentDidMount() {
-
+    getRequestData(this.props.location.state.requestId)
+      .then(response => {
+          this.setState({
+              data: response.body,
+      })
+      console.log(this.state.data);
+      console.log(this.state.data.additionalInfo.some_shit);
+    });
+    this.forceUpdate()
   }
 
   toggle() {
@@ -30,6 +37,10 @@ class CardPage extends Component {
 }
 
   render() {
+    let flag = "";
+    if (this.state.data.hasOwnProperty('additionalInfo')){
+      flag=this.state.data.additionalInfo.some_shit;
+    }
     return (
         <div className="container-fluid">
           <h3 className="blackHeader">Запрос</h3>
@@ -39,10 +50,33 @@ class CardPage extends Component {
                     <h4 className="blackHeader">Информация</h4>
                       <Card>
                           <CardBody>
-                              {/* <p className="blackHeader">бла-бла-бла ...</p> */}
-                              <p className="blackHeader">Имя: Иван</p>
-                              <p className="blackHeader">email: a@a.ru</p>
-                              <p className="blackHeader">Статус: Новый</p>
+                              <Form>
+                                <FormGroup>
+                                  <Label for="exampleEmail" className="blackHeader">Наименование запроса</Label>
+                                  <Input
+                                    type="title"
+                                    name="title"
+                                    value={flag}
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label for="examplePassword" className="blackHeader">Описание</Label>
+                                  <Input
+                                    type="description"
+                                    name="description"
+                                    value={this.state.data.body}
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label for="exampleDatetime" className="blackHeader">Дата создания запроса</Label>
+                                  <Input
+                                    type="datetime"
+                                    name="date"
+                                    placeholder="datetime placeholder"
+                                    value={this.state.data.registrationDate}
+                                  />
+                                </FormGroup>
+                              </Form>
                           </CardBody>
                       </Card>
                   </div>
@@ -72,43 +106,7 @@ class CardPage extends Component {
                   </div>
               </div>
           </Card>
-          <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Редактировать</button>
-          <Modal isOpen={this.state.modal} toggle={this.toggle}>
-            <ModalHeader  toggle={this.toggle}><h5 className="blackHeader">Редактирование запроса</h5></ModalHeader>
-            <ModalBody>
-                <Form
-                  name={"edit"}
-                  onSubmit={this.onSubmit}
-                  //initialValues={this.state.data}
-                  render={({ handleSubmit}) => (
-                    <form id="editForm" onSubmit={handleSubmit} style={{ padding: 15 }}>
-                        <Field
-                            className="field1"
-                            name={"name"}
-                            type="text"
-                            component="input"
-                            placeholder="Название запроса"
-                        />
-                        <Field
-                            className="field1"
-                            name={"body"}
-                            type="text"
-                            component="input"
-                            placeholder="Описание запроса"
-                        />
-                    </form>
-                  )}
-                />
-            </ModalBody>
-            <ModalFooter>
-                <button className="btn__req" onClick={() =>
-                        {/* document
-                        .getElementById("editForm")
-                        .dispatchEvent(new Event("submit", { cancelable: true })) */}
-                    }>Сохранить</button>
-                <button className="btn__signin" onClick={this.toggle}>Отмена</button>
-            </ModalFooter>
-        </Modal>
+          <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Сохранить</button>
       </div>
     );
   }

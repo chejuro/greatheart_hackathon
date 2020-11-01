@@ -39,13 +39,12 @@ export function getRequests() {
 
 export function getKanbanTableData() {
     return request({
-        url: "requests?requestTypeId=5",
+        url: "requests/kanban?requestTypeId=5",
         method : 'GET'
     });
 }
 
 export function changeRequestStatus(modifiedData) {
-    console.log(JSON.stringify(modifiedData))
     return request_without_response({
         url: "requests/change_status",
         method: 'POST',
@@ -54,9 +53,31 @@ export function changeRequestStatus(modifiedData) {
 }
 
 export function addCard(modifiedData) {
-    console.log(JSON.stringify(modifiedData))
     return request({
         url: "/requests/ward/c>reate",
+        method: 'POST',
+        body: JSON.stringify(modifiedData)
+    });
+}
+
+export function getRequestData(id) {
+    return request({
+        url: "/requests?id=" + id,
+        method : 'GET'
+    });
+}
+
+export function getRequestTypes() {
+    return request({
+        url: "/requests/types",
+        method : 'GET'
+    });
+}
+
+export function createNewRequest(modifiedData) {
+    console.log(JSON.stringify(modifiedData));
+    return request({
+        url: "/requests/create",
         method: 'POST',
         body: JSON.stringify(modifiedData)
     });
