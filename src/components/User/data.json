@@ -3,7 +3,6 @@
       {
         "id": "NEW",
         "title": "Новый",
-        "label": "20/70",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "cards": [
 
@@ -12,7 +11,6 @@
       {
         "id": "CONFIRMED",
         "title": "Оформлен",
-        "label": "10/20",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "cards": [
 
@@ -21,7 +19,6 @@
       {
         "id": "FOR_EXECUTION",
         "title": "К исполнению",
-        "label": "0/0",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
         "cards": [
 
@@ -31,7 +28,6 @@
         "id": "IN_WORK",
         "title": "В работе",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
-        "label": "2/5",
         "cards": [
 
         ]
@@ -40,7 +36,6 @@
         "id": "COMPLETED",
         "title": "Выполнен",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
-        "label": "1/1",
         "cards": [
 
         ]
@@ -49,7 +44,6 @@
         "id": "CLOSED",
         "title": "Закрыт",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
-        "label": "1/1",
         "cards": [
 
         ]
@@ -58,7 +52,6 @@
         "id": "CANCELED",
         "title": "Отказан",
         "style": {"width": 280, "backgroundColor": "#2fccc2"},
-        "label": "1/1",
         "cards": [
           
         ]
