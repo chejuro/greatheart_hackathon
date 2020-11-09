@@ -4,6 +4,43 @@ import Table from './Table'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form } from 'react-final-form'
 import { Field } from 'react-final-form-html5-validation'
+import { getHandbookTypes, getEntityName } from '../../utils/UtilsAPI'
+import { JsonToTable } from "react-json-to-table";
+import { Collapse } from "react-collapse";
+import classNames from "classnames";
+
+
+const myJson = {
+    "bd": "13-02-1999",
+    "city": "Moscow",
+    "name": "Person",
+    "Email": [
+      "a@a.ru"
+    ],
+    "phone": "+7-916-788-99-99",
+    "comment": "comment",
+    "university": "ВШЭ",
+    "work_place": "hz",
+    "availability": {
+      "id": 2,
+      "type": "enum",
+      "enum_type": 2
+    },
+    "fund_position": "Волонтёр",
+    "work_position": "Оператор",
+    "responsibility": "Улыбаться и махать",
+    "education_filed": "computer science",
+    "availability_comment": "какой-то коммент"
+  };
+
+  const posts = [
+    {
+      id: "1",
+      title: "Запись1",
+      message: <JsonToTable json={myJson} />
+    },
+  ];
+
 
 class Handbook extends Component {
 
@@ -12,10 +49,30 @@ class Handbook extends Component {
         this.state = {
             modal: false,
             id: '',
-            data: {}
+            data: {},
+            entityName: {},
+            activeIndex: null
         };
 
         this.toggle = this.toggle.bind(this);
+        this.toggleClass = this.toggleClass.bind(this);
+    }
+
+    componentDidMount() {
+        getHandbookTypes()
+            .then(response => {
+                this.setState({
+                    data: response,
+            })
+            console.log(this.state.data);
+        });
+        getEntityName()
+            .then(response => {
+                    this.setState({
+                        entityName: response,
+            })
+            console.log(this.state.entityName);
+        });
     }
 
     toggle() {
@@ -25,56 +82,62 @@ class Handbook extends Component {
         console.log(this.state.modal)
     }
 
+    toggleClass(index, e) {
+        this.setState({
+          activeIndex: this.state.activeIndex === index ? null : index
+        });
+      }
+    
+      moreLess(index) {
+        if (this.state.activeIndex === index) {
+          return (
+            <span>
+              <i className="fas fa-angle-up" /> Less
+            </span>
+          );
+        } else {
+          return (
+            <span>
+              <i className="fas fa-angle-down" /> More
+            </span>
+          );
+        }
+      }
+
     render() {
+        const { activeIndex } = this.state;
+        let content = posts.map((post, index) => {
+            return (
+              <li key={index}>
+                <div>
+                  <p className="blackHeader">{post.title}</p>
+                  <Collapse isOpened={activeIndex === index}>
+                    <div
+                      className={classNames("alert alert-info msg", {
+                        show: activeIndex === index,
+                        hide: activeIndex !== index
+                      })}
+                    >
+                      {post.message}
+                    </div>
+                  </Collapse>
+                  <button
+                    className="btn btn-primary btn-xs"
+                    onClick={this.toggleClass.bind(this, index)}
+                  >
+                    {this.moreLess(index)}
+                  </button>
+                </div>
+              </li>
+            );
+        });
         return (
             <div className="container-fluid">
                 <h3 className="blackHeader">Справочник сотрудников</h3>
                 <Card>
-                    <Table workers={this.props.worker_data}></Table>
-                    {/* <button className="btn__req" onClick={this.toggle}>Добавить сотрудника</button> */}
+                    {/* <Table workers={this.props.worker_data}></Table> */}
+                    <ul>{content}</ul>
                 </Card>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader  toggle={this.toggle}><h5 className="blackHeader">Добавление сотрудника</h5></ModalHeader>
-                    <ModalBody>
-                        <Form
-                            name={"edit"}
-                            onSubmit={this.onSubmit}
-                            render={({ handleSubmit}) => (
-                                <form id="editForm" onSubmit={handleSubmit} style={{ padding: 15 }}>
-                                    <Field
-                                        className="field1"
-                                        name={"fullName"}
-                                        type="text"
-                                        component="input"
-                                        placeholder="Введите ФИО сотрудника"
-
-                                    />
-                                    <Field
-                                        className="field2"
-                                        name={"email"}
-                                        type="email"
-                                        component="input"
-                                        placeholder="Введите почту сотрудника"
-                                    />
-                                    <Field
-                                        className="field3"
-                                        name={"func"}
-                                        type="text"
-                                        component="input"
-                                        placeholder="Введите должность сотрудника"
-                                    />
-                                </form>
-                            )}
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <button className="btn__req"
-                                // onClick={() =>
-                            // this.props.worker_data.push(this.state.textvalue)
-                        >Сохранить</button>
-                        <button className="btn__signin"   onClick={this.toggle}>Отмена</button>
-                    </ModalFooter>
-                </Modal>
 
             </div>
         );

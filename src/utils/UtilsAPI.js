@@ -82,3 +82,17 @@ export function createNewRequest(modifiedData) {
         body: JSON.stringify(modifiedData)
     });
 }
+
+export function getHandbookTypes() {
+    return request({
+        url: "/entities/types",
+        method: 'GET',
+    });
+}
+
+export function getEntityName() {
+    return request({
+        url: "/entities/employee/1",
+        method: 'GET',
+    });
+}
