@@ -74,6 +74,7 @@ class KanbanTable extends Component {
   componentDidMount() {
     getKanbanTableData()
       .then(response => {
+        console.log(response);
           this.setState({
               data: this.modifyResponse(response),
       })

@@ -7,15 +7,17 @@ const request = (options) => {
 
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
-
+    
     return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
+    .then(response => {
+        return response.json().then(json => {
             if(!response.ok) {
                 return Promise.reject(json);
             }
             return json;
-        })
+        });
+    }
+        
     );
 };
 
@@ -39,7 +41,7 @@ export function getRequests() {
 
 export function getKanbanTableData() {
     return request({
-        url: "/requests/kanban?requestTypeId=5",
+        url: "requests/kanban?requestTypeId=5",
         method : 'GET'
     });
 }
@@ -54,7 +56,7 @@ export function changeRequestStatus(modifiedData) {
 
 export function addCard(modifiedData) {
     return request({
-        url: "/requests/ward/c>reate",
+        url: "requests/ward/create",
         method: 'POST',
         body: JSON.stringify(modifiedData)
     });
@@ -62,14 +64,14 @@ export function addCard(modifiedData) {
 
 export function getRequestData(id) {
     return request({
-        url: "/requests?id=" + id,
+        url: "requests?id=" + id,
         method : 'GET'
     });
 }
 
 export function getRequestTypes() {
     return request({
-        url: "/requests/types",
+        url: "requests/types",
         method : 'GET'
     });
 }
@@ -77,7 +79,7 @@ export function getRequestTypes() {
 export function createNewRequest(modifiedData) {
     console.log(JSON.stringify(modifiedData));
     return request({
-        url: "/requests/create",
+        url: "requests/create",
         method: 'POST',
         body: JSON.stringify(modifiedData)
     });
@@ -85,14 +87,14 @@ export function createNewRequest(modifiedData) {
 
 export function getHandbookTypes() {
     return request({
-        url: "/entities/mainTypes",
+        url: "entities/mainTypes",
         method: 'GET',
     });
 }
 
 export function getEntityName() {
     return request({
-        url: "/entities/employee/1",
+        url: "entities/employee/1",
         method: 'GET',
     });
 }
