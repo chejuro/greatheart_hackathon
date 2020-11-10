@@ -39,7 +39,7 @@ export function getRequests() {
 
 export function getKanbanTableData() {
     return request({
-        url: "requests/kanban?requestTypeId=5",
+        url: "/requests/kanban?requestTypeId=5",
         method : 'GET'
     });
 }
@@ -85,7 +85,7 @@ export function createNewRequest(modifiedData) {
 
 export function getHandbookTypes() {
     return request({
-        url: "/entities/types",
+        url: "/entities/mainTypes",
         method: 'GET',
     });
 }

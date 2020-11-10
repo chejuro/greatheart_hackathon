@@ -49,7 +49,6 @@ class Handbook extends Component {
         this.state = {
             modal: false,
             id: '',
-            data: {},
             entityName: {},
             activeIndex: null
         };
@@ -59,13 +58,6 @@ class Handbook extends Component {
     }
 
     componentDidMount() {
-        getHandbookTypes()
-            .then(response => {
-                this.setState({
-                    data: response,
-            })
-            console.log(this.state.data);
-        });
         getEntityName()
             .then(response => {
                     this.setState({
@@ -135,7 +127,6 @@ class Handbook extends Component {
             <div className="container-fluid">
                 <h3 className="blackHeader">Справочник сотрудников</h3>
                 <Card>
-                    {/* <Table workers={this.props.worker_data}></Table> */}
                     <ul>{content}</ul>
                 </Card>
 
@@ -143,8 +134,5 @@ class Handbook extends Component {
         );
     }
 }
-Handbook.defaultProps = {worker_data: [
-        {id: 1, name: 'Владимир Маскимович Шестаков', birthday: '01-01-2000', city: 'Москва', phone: '89997776655', workplace: 'HSE', function: 'менеджер', fond_function: 'волонтер'},
-        {id: 2, name: 'Иванов Иван Иванович', birthday: '01-01-2000', city: 'Москва', phone: '89997776655', workplace: 'HSE', function: 'менеджер', fond_function: 'волонтер'},
-    ]}
+
 export default Handbook;

@@ -58,12 +58,12 @@ class User extends Component {
                                 <NavLink exact to="/kanban">Трекер запросов</NavLink>
                             </NavText>
                         </NavItem>
-                        <NavItem eventKey="handbook">
+                        <NavItem eventKey="handbook_types">
                             <NavIcon>
-                                <NavLink exact to="/handbook"><i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} /></NavLink>
+                                <NavLink exact to="/handbook_types"><i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} /></NavLink>
                             </NavIcon>
                             <NavText>
-                                <NavLink exact to="/handbook"><MyLink expanded={expanded}>Справочники</MyLink></NavLink>
+                                <NavLink exact to="/handbook_types"><MyLink expanded={expanded}>Справочники</MyLink></NavLink>
                             </NavText>
                         </NavItem>
                         <NavItem eventKey="help">
