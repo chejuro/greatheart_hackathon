@@ -39,9 +39,9 @@ export function getRequests() {
     });
 }
 
-export function getKanbanTableData() {
+export function getKanbanTableData(type) {
     return request({
-        url: "requests/kanban?requestTypeId=5",
+        url: "requests/kanban?requestTypeId=" + type,
         method : 'GET'
     });
 }
