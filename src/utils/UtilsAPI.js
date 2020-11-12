@@ -92,9 +92,9 @@ export function getHandbookTypes() {
     });
 }
 
-export function getEntityName() {
+export function getEntityName(entity) {
     return request({
-        url: "entities/employee/1",
+        url: "entities/" + entity + "/1",
         method: 'GET',
     });
 }

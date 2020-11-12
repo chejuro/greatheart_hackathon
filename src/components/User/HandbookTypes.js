@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Card} from "reactstrap";
+import { Router, Route, NavLink, HashRouter, Link } from 'react-router-dom';
 import { getHandbookTypes } from '../../utils/UtilsAPI'
 import { ListGroup, ListGroupItem } from 'reactstrap';
 
@@ -23,20 +24,16 @@ class HandbookTypes extends Component {
         });
     }
 
-    onListClick = (handbookId) => {
-        console.log(`handbookId: ${handbookId}`)
-        this.props.history.push({
-          pathname: '/handbook/type',
-          state: { handbookId: handbookId }
-        })
-      }
-
     render() {
         let content = this.state.data.map((handbook, index) => {
+            console.log(handbook.name)
             return (
               <li key={index}>
                 <div>
-                    <ListGroupItem tag="a" handbookId={handbook} href='/handbook'>{handbook.description}</ListGroupItem>
+                    <NavLink to={{
+                        pathname: "/handbook", 
+                        state: { entity: handbook.name }
+                        }}><ListGroupItem tag="a">{handbook.description}</ListGroupItem></NavLink>
                 </div>
               </li>
             );
