@@ -1,5 +1,4 @@
 import React, {Component}  from 'react';
-import { Popover, PopoverHeader, PopoverBody, ButtonGroup} from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
 import './../../css/User.css';

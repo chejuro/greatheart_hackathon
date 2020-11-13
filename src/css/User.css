@@ -1,9 +1,86 @@
+.content {
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: all .15s;
+    padding: 0 40px;
+}
+
+.user__logo {
+    /*margin: 0 10px;*/
+    width: 58px;
+}
+
+.menu__user {
+    margin: 10px -40px 20px -40px;
+    background-color: #2D2D2D;
+    text-align: right;
+}
+
+.umenu {
+     margin-top: 3px;
+     margin-bottom: 4px;
+     padding: 9px 0;
+ }
+
+.menu__item a {
+    font-size: 16px;
+    font-weight:700;
+    color: #fff;
+}
+
 .card {
     margin-bottom: 20px;
-    color: #000;
     padding: 15px;
     text-align: center;
     align-content: center;
+}
+
+.stat_header {
+    color: #999999;
+    font-weight: 700;
+
+}
+
+#userPopover {
+    background-color: #2D2D2D;
+    border: none;
+}
+
+.bench_desc {
+    font-size: 16px;
+    text-align: justify;
+}
+
+a:hover {
+    color: #ffffff
+}
+
+.like_btn {
+    font-family: 'Georgia';
+    margin: 8px 0;
+    background: rgb(123, 46, 49);
+    padding: 7px 40px;
+    width: 100%;
+    cursor: pointer;
+    color: white;
+}
+
+.like_btn:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.block {
+    width: 100%;
+    margin: 8px 0;
+    background: rgb(123, 46, 49);
+    padding: 7px 14px;
+    text-align: center;
+}
+
+.iconhref :hover {
+    color: #ffffff;
 }
 
 .userinfo {
@@ -12,7 +89,118 @@
     font-weight: 500;
 }
 
+.modal_btn1 {
+    color: rgb(231, 78, 47);
+}
 
-.card-body{padding:20px}.overdue 
-.card-body small{font-weight:300;color:#aaa}.overdue 
-.card-body h3{margin-bottom:5px}
+.modal_btn2 {
+    color: rgb(123, 46, 49);
+}
+
+button.close {
+    width: 20%;
+}
+
+.sidenav---sidenav-subnav---1EN61 {
+    min-width: 250px;
+    background-color: darkred;
+}
+
+a:not([href]):not([tabindex]) {
+    color: black;
+}
+
+.status {
+    color: black;
+    font-family: Georgia;
+    font-style: italic;
+    font-size: 16px;
+    text-align: center;
+}
+
+.stat_header {
+    font-size: 18px;
+    font-family: 'Arial';
+    font-weight: normal;
+    color: #2D2D2D;
+    padding: 10px;
+}
+
+#userPopover {
+    border: none;
+}
+
+.res_filter{
+    font-family: Arial;
+    width: 100%;
+    padding: 1px 10px;
+    margin: 8px 0;
+}
+
+.res_filter:hover, .res_filter:active {
+    border-color: #2D2D2D;
+    border-width: medium;
+}
+
+input[type=text].form-control::placeholder {
+    color: white;
+}
+
+.react-bs-table-no-data {
+    color: white;
+}
+
+.stat_charts {
+    margin-top: 40px;
+}
+
+
+@media (min-height: 100px) {
+    .menu__user {
+        position: sticky;
+        top: 0;
+    }
+}
+
+.myrow {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* Media queries */
+
+@media screen and (max-width: 992px) {
+    .menu {
+        justify-content: center;
+    }
+    .request__form {
+        justify-content: center;
+    }
+    .like_btn {
+        padding: 7px 0px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .menu {
+        flex-direction: column;
+        justify-content: center;
+    }
+    .like_btn {
+        padding: 7px 0px;
+    }
+    .login__form {
+        background: rgba(255, 255, 255,.7);
+        justify-content: center;
+        margin: auto;
+        margin-bottom: 20px;
+    }
+    .menu__item {
+        text-align: center;
+        margin-bottom:10px;
+    }
+    .img__style {
+        visibility: hidden;
+    }
+}
+

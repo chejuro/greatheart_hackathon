@@ -18,6 +18,7 @@ class CardPage extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.location.state.requestId)
     getRequestData(this.props.location.state.requestId)
       .then(response => {
           this.setState({
@@ -34,7 +35,7 @@ class CardPage extends Component {
         modal: !prevState.modal
     }));
     console.log(this.state.modal)
-}
+  }
 
   render() {
     let flag = "";
@@ -54,17 +55,17 @@ class CardPage extends Component {
                                 <FormGroup>
                                   <Label for="exampleEmail" className="blackHeader">Наименование запроса</Label>
                                   <Input
-                                    type="title"
+                                    type="text"
                                     name="title"
-                                    value={flag}
+                                    defaultValue={flag}
                                   />
                                 </FormGroup>
                                 <FormGroup>
                                   <Label for="examplePassword" className="blackHeader">Описание</Label>
                                   <Input
-                                    type="description"
+                                    type="text"
                                     name="description"
-                                    value={this.state.data.body}
+                                    defaultValue={this.state.data.body}
                                   />
                                 </FormGroup>
                                 <FormGroup>
@@ -73,7 +74,7 @@ class CardPage extends Component {
                                     type="datetime"
                                     name="date"
                                     placeholder="datetime placeholder"
-                                    value={this.state.data.registrationDate}
+                                    defaultValue={this.state.data.registrationDate}
                                   />
                                 </FormGroup>
                               </Form>
@@ -96,10 +97,6 @@ class CardPage extends Component {
                       </FormGroup>
                       <FormGroup>
                         <Input type="file" name="file" id="exampleFile" />
-                        {/* <FormText color="muted">
-                          This is some placeholder block-level help text for the above input.
-                          It's a bit lighter and easily wraps to a new line.
-                        </FormText> */}
                       </FormGroup>
                       <Button>Submit</Button>
                     </Form>

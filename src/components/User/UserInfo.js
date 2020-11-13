@@ -51,14 +51,6 @@ class UserInfo extends Component {
                                                 <form id="editForm" onSubmit={handleSubmit} style={{ padding: 15 }}>
                                                     <Field
                                                         className="field1"
-                                                        name={"companyName"}
-                                                        type="text"
-                                                        component="input"
-                                                        placeholder="Название компании"
-                                                        
-                                                    />
-                                                    <Field
-                                                        className="field1"
                                                         name={"fullName"}
                                                         type="text"
                                                         component="input"
@@ -93,11 +85,9 @@ class UserInfo extends Component {
                                 </Modal>
                             </div>
                             <div className="col-lg-6">
-                                <p className="userinfo"><b>Название компании:</b> {this.state.data.companyName}</p>
                                 <p className="userinfo"><b>Имя сотрудника:</b> {this.state.data.fullName}</p>
                                 <p className="userinfo"><b>Должность сотрудника:</b> {this.state.data.post}</p>
                                 <p className="userinfo"><b>Электронная почта:</b> {this.state.data.email}</p>
-                                <p className="userinfo"><b>Отрасль компании:</b> {this.props.sphere}</p>
                             </div>
                         </div>
                         </CardBody>
