@@ -85,6 +85,15 @@ export function createNewRequest(modifiedData) {
     });
 }
 
+export function changeRequest(modifiedData) {
+    console.log(JSON.stringify(modifiedData));
+    return request({
+        url: "/requests/change",
+        method: 'POST',
+        body: JSON.stringify(modifiedData)
+    });
+}
+
 export function getHandbookTypes() {
     return request({
         url: "entities/mainTypes",
@@ -92,9 +101,16 @@ export function getHandbookTypes() {
     });
 }
 
-export function getEntityName(entity) {
+export function getEntities(id) {
     return request({
-        url: "entities/" + entity + "/1",
+        url: "entities/" + id,
+        method: 'GET',
+    });
+}
+
+export function getEntityInfo(entity_id, enum_type) {
+    return request({
+        url: "entities/" + entity_id + '/' + enum_type,
         method: 'GET',
     });
 }

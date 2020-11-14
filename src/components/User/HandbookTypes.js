@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Card} from "reactstrap";
-import { Router, Route, NavLink, HashRouter, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { getHandbookTypes } from '../../utils/UtilsAPI'
 import { ListGroup, ListGroupItem } from 'reactstrap';
 
@@ -32,8 +32,9 @@ class HandbookTypes extends Component {
                 <div>
                     <NavLink to={{
                         pathname: "/handbook", 
+                        search: `id=${handbook.id}`,
                         state: { entity: handbook.name }
-                        }}><ListGroupItem tag="a">{handbook.description}</ListGroupItem></NavLink>
+                        }}><ListGroupItem tag="a">{handbook.name}</ListGroupItem></NavLink>
                 </div>
               </li>
             );

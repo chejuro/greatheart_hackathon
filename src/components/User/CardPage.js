@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { Card, CardTitle, CardImg, CardBody, Col, Row } from 'reactstrap';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-import {getRequestData} from './../../utils/UtilsAPI'
+import { withRouter } from "react-router-dom";
+import { getRequestData, changeRequest } from './../../utils/UtilsAPI'
 import './../../css/User.css';
 import './../../App.css';
 
@@ -10,31 +11,40 @@ class CardPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        modal: false,
-        data: {}
+        data: {},
+        request_id: ''
     };
-
-    this.toggle = this.toggle.bind(this);
   }
 
   componentDidMount() {
-    console.log(this.props.location.state.requestId)
-    getRequestData(this.props.location.state.requestId)
+    const query = new URLSearchParams(this.props.location.search);
+    console.log(query.get('id'))
+    getRequestData(query.get('id'))
       .then(response => {
           this.setState({
               data: response.body,
+              request_id: query.get('id')
       })
       console.log(this.state.data);
       console.log(this.state.data.additionalInfo.some_shit);
+      console.log(this.state.request_id);
     });
     this.forceUpdate()
   }
 
-  toggle() {
-    this.setState(prevState => ({
-        modal: !prevState.modal
-    }));
-    console.log(this.state.modal)
+  change_request = () => {
+    let title = document.getElementById("title").value
+    let body = document.getElementById("description").value
+    let request_type = 5
+    let request = {
+      id: this.state.request_id,
+      requestType: request_type,
+      body: body,
+      additionalInfo: {
+        some_shit : title
+      }
+    }
+    changeRequest(request).then(window.location.reload())
   }
 
   render() {
@@ -57,6 +67,7 @@ class CardPage extends Component {
                                   <Input
                                     type="text"
                                     name="title"
+                                    id="title"
                                     defaultValue={flag}
                                   />
                                 </FormGroup>
@@ -65,6 +76,7 @@ class CardPage extends Component {
                                   <Input
                                     type="text"
                                     name="description"
+                                    id="description"
                                     defaultValue={this.state.data.body}
                                   />
                                 </FormGroup>
@@ -73,6 +85,7 @@ class CardPage extends Component {
                                   <Input
                                     type="datetime"
                                     name="date"
+                                    id="date"
                                     placeholder="datetime placeholder"
                                     defaultValue={this.state.data.registrationDate}
                                   />
@@ -103,10 +116,10 @@ class CardPage extends Component {
                   </div>
               </div>
           </Card>
-          <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Сохранить</button>
+          <button id="btn_req" name="btn_req" className="btn__req" onClick={this.change_request}>Сохранить</button>
       </div>
     );
   }
 }
  
-export default CardPage;
+export default withRouter(CardPage);

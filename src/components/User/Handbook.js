@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Card} from "reactstrap";
-import { getEntityName } from '../../utils/UtilsAPI'
+import { getEntities, getEntityInfo } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
@@ -12,7 +12,7 @@ class Handbook extends Component {
       this.state = {
           entities: [],
           activeIndex: null,
-          posts: []
+          name: ''
       };
 
       this.toggle = this.toggle.bind(this);
@@ -20,28 +20,39 @@ class Handbook extends Component {
     }
 
     componentDidMount() {
-      console.log(this.props.location.state.entity)
-      getEntityName(this.props.location.state.entity)
+      const query = new URLSearchParams(this.props.location.search);
+      console.log(query.get('id'))
+      getEntities(query.get('id'))
           .then(response => {
-                  this.setState({
-                    entities: this.modifyResponse(response),
-          })
+            this.setState({
+              entities: this.modifyResponse(response),
+              name: response[0].name
+          })  
       });
     }
 
-    modifyResponse(response) {
+    modifyResponse(resp) {
       let posts = []
-      console.log(response);
-      for (var i = 0; i < response.length; i++) {
+      console.log(resp);
+      for (var i = 0; i < resp.length; i++) {
+        let obj = resp[i].json
+        if (obj.hasOwnProperty('best_friend_employee')) {
+            getEntityInfo(obj.best_friend_employee.id, obj.best_friend_employee.enum_type)
+              .then(response => {
+                obj.best_friend_employee = response[0].json.name
+                console.log(response[0].json.name)
+                console.log(obj)
+              })
+        }
+        console.log(obj)
         posts.push({
           id: i,
-          title: response[i].json.name,
-          message: <JsonToTable json={response[i].json} />
+          title: resp[i].title,
+          message: <JsonToTable json={obj} />
         })
       }
-      this.setState({
-        posts: posts
-      });
+      
+      return posts
     }
 
     toggle() {
@@ -75,7 +86,7 @@ class Handbook extends Component {
 
     render() {
       const { activeIndex } = this.state;
-      let content = this.state.posts.map((post, index) => {
+      let content = this.state.entities.map((post, index) => {
           return (
             <li key={index}>
               <div>
@@ -102,7 +113,7 @@ class Handbook extends Component {
       });
       return (
           <div className="container-fluid">
-              <h3 className="blackHeader">Справочник сотрудников</h3>
+              <h3 className="blackHeader">{this.state.name}</h3>
               <Card>
                   <ul>{content}</ul>
               </Card>

@@ -3,7 +3,6 @@ import { Router, Route, NavLink, HashRouter, Link } from 'react-router-dom';
 import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import './../../../node_modules/font-awesome/css/font-awesome.min.css';
 import UserMenuPanel from './UserMenuPanel';
-import NavBar from './../NavBar';
 import UserInfo from './UserInfo';
 import HandbookTypes from './HandbookTypes';
 import Handbook from './Handbook';

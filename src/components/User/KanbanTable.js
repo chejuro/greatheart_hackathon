@@ -58,8 +58,8 @@ class KanbanTable extends Component {
     console.log(`metadata: ${metadata}`)
     console.log(`laneId: ${laneId}`)
     this.props.history.push({
-      pathname: `/card/${cardId}`,
-      state: { requestId: cardId }
+      pathname: `/card`,
+      search: `id=${cardId}`
     })
   }
 
