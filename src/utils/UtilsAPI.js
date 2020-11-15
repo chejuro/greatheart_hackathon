@@ -57,9 +57,17 @@ export function getRequests() {
     });
 }
 
-export function getKanbanTableData(type) {
+export function getKanbanTableData(type, params) {
+    let url = ""
+    if (params === null){
+        url = "requests/kanban?requestTypeId=" + type
+    }
+    else {
+        url = "requests/kanban?requestTypeId=" + type + "&body=" + params
+    }
+    console.log(url)
     return request({
-        url: "requests/kanban?requestTypeId=" + type,
+        url: url,
         method : 'GET',
         with_auth: true,
     });

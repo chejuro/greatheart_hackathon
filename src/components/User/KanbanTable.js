@@ -26,6 +26,7 @@ class KanbanTable extends Component {
     this.toggle = this.toggle.bind(this);
     this.create_request = this.create_request.bind(this);
     this.select = this.select.bind(this)
+    this.findBytext = this.findBytext.bind(this)
   }
 
   switchDropdown = () => {
@@ -85,9 +86,11 @@ class KanbanTable extends Component {
 
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
+    console.log(this.props.location)
     let id = query.get('typeId')
+    let params = query.get('body')
 
-    getKanbanTableData(id)
+    getKanbanTableData(id, params)
       .then(response => {
         console.log(response);
           this.setState({
@@ -146,6 +149,17 @@ class KanbanTable extends Component {
     window.location.reload()
   }
 
+  findBytext() {
+    let text = document.getElementById("findbytext").value
+    console.log(text)
+    let cur_typeId = this.state.currentTypeId
+    this.props.history.push({
+      pathname: `/kanban`,
+      search: `typeId=${cur_typeId}&body=${text}`
+    })
+    window.location.reload()
+  }
+
   render() {
     console.log('App component: render()')
     let content = this.state.types.map((type, index) => {
@@ -170,6 +184,19 @@ class KanbanTable extends Component {
             </DropdownMenu>
           </Dropdown>
         </div>
+        <div>
+          <Form id="editForm">
+            <FormGroup>
+              <Label className="blackHeader">Фильтр по тексту</Label>
+              <Input
+                type="text"
+                id="findbytext"
+              />
+              <button className="btn__req" onClick={this.findBytext}>Найти</button>
+            </FormGroup>
+          </Form>
+        </div>
+        
 
         <div className="boardContainer">
           <Board 
