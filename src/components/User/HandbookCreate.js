@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Card, Form, FormGroup, Label, Input } from "reactstrap";
-import { getHandbookTypes, addEntityType } from '../../utils/UtilsAPI'
+import { addEntityType } from '../../utils/UtilsAPI'
 
 
 class HandbookCreate extends Component {
@@ -45,9 +45,9 @@ class HandbookCreate extends Component {
         console.log(handbook_example)
         addEntityType(handbook_example)
 
-        // let title = document.getElementById("title").value
-        // let body = document.getElementById("body").value
-        // window.location.reload()
+        this.props.history.push({
+            pathname: "/handbook_types"
+        })
     }
 
     render() {
