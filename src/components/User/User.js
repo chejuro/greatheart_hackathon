@@ -70,10 +70,16 @@ class User extends Component {
                             </NavItem>
                             <NavItem eventKey="kanban">
                                 <NavIcon>
-                                    <NavLink exact to="/kanban"><i className="fa fa-fw fa-calendar" style={{ fontSize: '1.75em' }} /></NavLink>
+                                    <NavLink exact to={{
+                                        pathname: "/kanban", 
+                                        search: `typeId=5`,
+                                        }}><i className="fa fa-fw fa-calendar" style={{ fontSize: '1.75em' }} /></NavLink>
                                 </NavIcon>
                                 <NavText>
-                                    <NavLink exact to="/kanban">Трекер запросов</NavLink>
+                                    <NavLink exact to={{
+                                        pathname: "/kanban", 
+                                        search: `typeId=5`,
+                                        }}>Трекер запросов</NavLink>
                                 </NavText>
                             </NavItem>
                             <NavItem eventKey="handbook_types">

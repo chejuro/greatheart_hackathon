@@ -1,9 +1,12 @@
 import React, {Component, useState} from 'react';
+import { withRouter } from "react-router-dom";
 import Board from 'react-trello'
 import board_data from './data.json';
 import './../../App.css';
-import {getKanbanTableData, changeRequestStatus, createNewRequest, getRequestTypes} from './../../utils/UtilsAPI'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {getKanbanTableData, changeRequestStatus, createNewRequest, getRequestTypes,
+        filterByRequestType } from './../../utils/UtilsAPI'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, 
+        Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 
 const cardStyle = { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 }
@@ -11,8 +14,6 @@ const laneStyle = {"width": 280, "backgroundColor": "#2fccc2"}
 
 
 class KanbanTable extends Component {
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +25,7 @@ class KanbanTable extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.create_request = this.create_request.bind(this);
+    this.select = this.select.bind(this)
   }
 
   switchDropdown = () => {
@@ -40,7 +42,7 @@ class KanbanTable extends Component {
   }
 
   handleDragEnd = (cardId, sourceLaneId, targetLaneId) => {
-    changeRequestStatus({requestId: cardId, status: targetLaneId})
+    changeRequestStatus({requestId: Number(cardId), status: Number(targetLaneId)})
     console.log('drag ended')
     console.log(`cardId: ${cardId}`)
     console.log(`sourceLaneId: ${sourceLaneId}`)
@@ -82,7 +84,10 @@ class KanbanTable extends Component {
   }
 
   componentDidMount() {
-    getKanbanTableData(5)
+    const query = new URLSearchParams(this.props.location.search);
+    let id = query.get('typeId')
+
+    getKanbanTableData(id)
       .then(response => {
         console.log(response);
           this.setState({
@@ -90,24 +95,27 @@ class KanbanTable extends Component {
       })
       console.log(this.state.data);
     });
+    
     getRequestTypes()
       .then(response => {
           this.setState({
-              types: response.body,
+            types: response.body,
       })
-      console.log(this.state.types);
-
-      this.setState({
-        currentTypeId : 5,
-        currentType : this.state.types.find(t => t.id == 5).name,
-      });
-    });
-
-
+    }).then(response => {
+      this.setState(prevState => {
+      console.log(prevState.types)
+      return {
+        ...prevState,
+        currentTypeId: id,
+        currentType : prevState.types.find(t => t.id == id).name,
+      };
+    })
+  })
   }
 
   toggle() {
     this.setState(prevState => ({
+        ...prevState,
         modal: !prevState.modal
     }));
     console.log(this.state.modal)
@@ -128,22 +136,40 @@ class KanbanTable extends Component {
   }
 
 
+  select(event) {
+    console.log(event.target.innerText)
+    let id = this.state.types.find(t => t.name == event.target.innerText).id
+    this.props.history.push({
+      pathname: `/kanban`,
+      search: `typeId=${id}`
+    })
+    window.location.reload()
+  }
 
   render() {
     console.log('App component: render()')
+    let content = this.state.types.map((type, index) => {
+      return (
+        <li key={index}>
+          <div>
+            <DropdownItem id={`dropdown_${type.id}`} onClick={this.select}>{type.name}</DropdownItem>
+          </div>
+        </li>
+      );
+    });
+
     return (
       <div>
-      <Dropdown className="CustomDropdown" isOpen={this.state.dropdownOpen} toggle={this.switchDropdown}>
-          <DropdownToggle caret>
-            {this.state.currentType}
-          </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem onCllick={this.chooseType}>Foo Action</DropdownItem>
-          <DropdownItem>Bar Action</DropdownItem>
-          <DropdownItem>Quo Action</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-
+        <div className="col-sm-3">
+          <Dropdown className="customDropdown" isOpen={this.state.dropdownOpen} toggle={this.switchDropdown}>
+            <DropdownToggle caret>
+              {this.state.currentType}
+            </DropdownToggle>
+            <DropdownMenu>
+              <ul>{content}</ul>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
 
         <div className="boardContainer">
           <Board 
@@ -198,4 +224,4 @@ class KanbanTable extends Component {
   }
 }
  
-export default KanbanTable;
+export default withRouter(KanbanTable);

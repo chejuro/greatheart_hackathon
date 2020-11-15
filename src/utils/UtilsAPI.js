@@ -47,6 +47,7 @@ export function getKanbanTableData(type) {
 }
 
 export function changeRequestStatus(modifiedData) {
+    console.log(modifiedData)
     return request_without_response({
         url: "requests/change_status",
         method: 'POST',
@@ -69,9 +70,16 @@ export function getRequestData(id) {
     });
 }
 
-export function getRequestTypes() {
+export async function getRequestTypes() {
     return request({
         url: "requests/types",
+        method : 'GET'
+    });
+}
+
+export function filterByRequestType(requestTypeId) {
+    return request({
+        url: "requests/kanban?requestTypeId=" + requestTypeId,
         method : 'GET'
     });
 }
