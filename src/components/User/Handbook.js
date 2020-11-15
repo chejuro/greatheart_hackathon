@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Card, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
-import { getEntities, getEntityInfo, getEnums } from '../../utils/UtilsAPI'
+import { getEntities, getEntityInfo, getEntityType, getEnums } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
@@ -23,13 +23,25 @@ class Handbook extends Component {
     componentDidMount() {
       const query = new URLSearchParams(this.props.location.search);
       console.log(query.get('id'))
+
+      getEntityType(query.get('id')).then(response => {
+        this.setState({
+          name : response.body.name
+        })
+      })
+
       getEntities(query.get('id'))
           .then(response => {
-            if (response.length!==0){
+            console.log(response)
+            return this.modifyResponse(response)
+          })
+          .then(response => {
+            console.log(response)
+            if (response.length != 0) {
               this.setState({
-                entities: this.modifyResponse(response),
-                name: response[0].name
-            })} 
+                entities: response
+            })
+            }
       });
       // getEnums()
       //     .then(response => {
@@ -41,28 +53,33 @@ class Handbook extends Component {
     }
 
     modifyResponse(resp) {
-      let posts = []
-      console.log(resp);
-      // if (resp.length==0){
-      //   return posts
-      // }
-      for (var i = 0; i < resp.length; i++) {
-        let title = resp[i].title
-        let obj = resp[i].json
-        if (obj.hasOwnProperty('best_friend_employee')) {
-            getEntityInfo(obj.best_friend_employee.id, obj.best_friend_employee.enum_type)
-              .then(response => {
-                obj.best_friend_employee = response[0].json.name
-              })
-        }
-        posts.push({
-          id: i,
-          title: resp[i].json[title],
-          message: <JsonToTable json={obj} />
-        })
-      }
+      let promises = []
       
-      return posts
+      for (var i = 0; i < resp.length; i++) {
+        for (var key in resp[i].json) {
+          if (resp[i].json[key].type != null) {
+            let type = resp[i].json[key].entity_type;
+            let id = resp[i].json[key].id
+              promises.push(getEntityInfo(type, id, i, key))
+          }
+        }
+      }
+
+      return Promise.all(promises).then(response => {
+        for (var i in response) {
+          resp[response[i].id].json[response[i].key] = response[i].data
+        }
+      }).then(_ => {
+        let posts = []
+        for (var i in resp) {
+          posts.push({
+            id: i,
+            title: resp[i].json[resp[i].title],
+            message: <JsonToTable json={resp[i].json} />
+          })
+        }
+        return posts
+      })
     }
 
     toggle() {

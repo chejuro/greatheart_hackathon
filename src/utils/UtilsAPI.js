@@ -144,6 +144,14 @@ export function getHandbookTypes() {
     });
 }
 
+export function getEntityType(id) {
+    return request({
+        url: "entities/mainType?entityTypeId=" + id,
+        method: 'GET',
+        with_auth:true,
+    });
+}
+
 export function getEntities(id) {
     return request({
         url: "entities/" + id,
@@ -152,12 +160,18 @@ export function getEntities(id) {
     });
 }
 
-export function getEntityInfo(entity_id, enum_type) {
+export function getEntityInfo(entity_type_id, entity_id, post_id, field_key) {
     return request({
-        url: "entities/" + entity_id + '/' + enum_type,
+        url: "entities/" + entity_type_id + '/' + entity_id,
         method: 'GET',
         with_auth:true,
-    });
+    }).then(response => {
+        return {
+            id: post_id,
+            data : response[0].json,
+            key : field_key
+        }
+    })
 }
 
 export function getEnums() {
