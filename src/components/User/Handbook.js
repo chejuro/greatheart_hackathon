@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Card, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
-import { getEntities, getEntityInfo, getEntityType, addEntity, getEnums, addEntityType, getMainEntities } from '../../utils/UtilsAPI'
+import { getEntities, getEntityInfo, getEntityType, addEntity, getEnums, addEntityType } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
@@ -49,14 +49,6 @@ class Handbook extends Component {
               enums: response
           })
           console.log(this.state.enums)
-      });
-
-      getMainEntities()
-          .then(response => {
-            this.setState({
-              mainEntities: response
-          })
-          console.log(this.state.mainEntities)
       });
     }
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Card, Form, FormGroup, Label, Input } from "reactstrap";
-import { addEntityType } from '../../utils/UtilsAPI'
+import { addEntityType, getFieldTypes } from '../../utils/UtilsAPI'
 
 
 class HandbookCreate extends Component {
@@ -8,30 +8,41 @@ class HandbookCreate extends Component {
         super(props);
         this.state = {
             data: [],
-            fields: []
+            fields: [],
+            fieldTypes : [],
         };
 
         this.create_handbook = this.create_handbook.bind(this);
     }
 
     componentDidMount() {
-
+        getFieldTypes().then(response => {            
+            this.setState({
+                fieldTypes : response.body
+            })
+        });
     }
 
     addQuestion = e => {
         e.preventDefault()
-        let val = this.state.fields.length + 0
-        let fields = this.state.fields.concat([val])
+        let val = this.state.fields.length
+        let fields = this.state.fields
+        fields.push({
+            name : "title" + val,
+            necessary : "necessary" + val,
+            typeId : "type" + val,
+            type : "string",
+        })
         this.setState({
-            fields
+            fields : fields
         })
     }
 
     create_handbook = () => {
         console.log(this.state.fields)
         let name = document.getElementById("name").value
-        console.log(name)
-        let handbook_example = {
+        
+        let directory = {
             name: name,
             main: true,
             titleField: "Наименование",
@@ -42,12 +53,26 @@ class HandbookCreate extends Component {
                 }
             }
         }
-        console.log(handbook_example)
-        addEntityType(handbook_example)
-
-        this.props.history.push({
-            pathname: "/handbook_types"
+        for (var i in this.state.fields) {
+            let info = this.state.fields[i];
+            let field = {
+                type : this.state.fields[i].type,
+                notnull : document.getElementById(info.necessary).checked
+            }
+            directory.necessaryFields[document.getElementById(info.name).value] = field;
+        }
+     
+        addEntityType(directory).then(_ => {
+            this.props.history.push({
+                pathname: "/handbook_types"
+            })
         })
+    }
+
+    handleChangeFieldType = (input, e) => {
+        input.type = e.target.value
+        console.log(input)
+        this.forceUpdate();
     }
 
     render() {
@@ -65,17 +90,28 @@ class HandbookCreate extends Component {
                             />
                         </FormGroup>
                         {this.state.fields.map(input => 
-                            <FormGroup row>
+                            <FormGroup column>
                                 <Label className="blackHeader">Новое поле</Label>
                                 <Input
                                     type="text"
                                     name="title"
-                                    id="title"
+                                    id={input.name}
                                 />
                                 <Label className="blackHeader" check>
-                                    <Input type="checkbox" />{' '}
-                                    is Null
+                                    <Input type="checkbox" id={input.necessary}/>{' '}
+                                    Обязательное
                                 </Label>
+                                <div></div>
+                                <Label className="blackHeader">
+                                    Тип значения
+
+                                    <select id={input.typeId} value={input.type} onChange={(e) => this.handleChangeFieldType(input, e)}>
+                                        {this.state.fieldTypes.map(fieldType => 
+                                            <option value={fieldType.type}>{fieldType.rusName}</option>
+                                        )}
+                                    </select>
+                                </Label>
+                        
                             </FormGroup>
                         )}
                         <button id="btn_req" name="btn_req" className="btn__req col-sm-3" onClick={this.addQuestion}>
