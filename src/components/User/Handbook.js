@@ -23,36 +23,46 @@ class Handbook extends Component {
       const query = new URLSearchParams(this.props.location.search);
       console.log(query.get('id'))
       getEntities(query.get('id'))
+      .then(response => {
+        return this.modifyResponse(response)
+      })
           .then(response => {
+            console.log(response)
             this.setState({
-              entities: this.modifyResponse(response),
+              entities: response,
               name: response[0].name
           })  
       });
     }
 
     modifyResponse(resp) {
-      let posts = []
-      console.log(resp);
-      for (var i = 0; i < resp.length; i++) {
-        let obj = resp[i].json
-        if (obj.hasOwnProperty('best_friend_employee')) {
-            getEntityInfo(obj.best_friend_employee.id, obj.best_friend_employee.enum_type)
-              .then(response => {
-                obj.best_friend_employee = response[0].json.name
-                console.log(response[0].json.name)
-                console.log(obj)
-              })
-        }
-        console.log(obj)
-        posts.push({
-          id: i,
-          title: resp[i].title,
-          message: <JsonToTable json={obj} />
-        })
-      }
+      let promises = []
       
-      return posts
+      for (var i = 0; i < resp.length; i++) {
+        for (var key in resp[i].json) {
+          if (resp[i].json[key].type != null) {
+            let type = resp[i].json[key].entity_type;
+            let id = resp[i].json[key].id
+              promises.push(getEntityInfo(type, id, i, key))
+          }
+        }
+      }
+
+      return Promise.all(promises).then(response => {
+        for (var i in response) {
+          resp[response[i].id].json[response[i].key] = response[i].data
+        }
+      }).then(_ => {
+        let posts = []
+        for (var i in resp) {
+          posts.push({
+            id: i,
+            title: resp[i].title,
+            message: <JsonToTable json={resp[i].json} />
+          })
+        }
+        return posts
+      })
     }
 
     toggle() {
