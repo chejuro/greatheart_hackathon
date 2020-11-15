@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from 'react-final-form'
 import { Field } from 'react-final-form-html5-validation'
-// import { signin } from './../../utils/APIUtils'
+import {signIn} from './../../utils/UtilsAPI'
+import inMemoryJWT from './../../utils/inMemoryJWT'
 import { ACCESS_TOKEN} from './../../constants';
+import { withRouter } from 'react-router-dom';
 
 class LogInForm extends Component {
 	state = {
@@ -24,7 +26,13 @@ class LogInForm extends Component {
     }
 
     onSubmit(values) {
-
+        let props = this.props;
+        signIn(values).then(response => {
+            inMemoryJWT.setToken(response.body);
+            props.history.push({
+                pathname: `/user`,
+            })
+        });
     }
 
     render() {
@@ -35,14 +43,13 @@ class LogInForm extends Component {
                 render={({handleSubmit}) => (
                 <form onSubmit={handleSubmit}>
                     <div className="container login__form">
-                        <label for="uname"><b>Электронная почта</b></label>
+                        <label for="login"><b>Логин</b></label>
                         <Field
-                            id="uname"
-                            name="usernameOrEmail"
+                            id="login"
+                            name="login"
                             type="text"
-                            typeMismatch="Введите корректный email адрес"
                             component="input"
-                            placeholder="Email"
+                            placeholder="Логин"
                             required
                             valueMissing="Необходимо ввести значение"
                         />
@@ -69,4 +76,4 @@ class LogInForm extends Component {
     }
 }
  
-export default LogInForm;
+export default withRouter(LogInForm);

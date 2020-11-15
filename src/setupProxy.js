@@ -18,4 +18,5 @@ module.exports = function(app) {
     //                 return 'http://80.87.197.233:8080/requests?requestId=';
         
     }}))
+    app.use(createProxyMiddleware('/auth', {target : 'http://80.87.197.233:8090'}))
 };

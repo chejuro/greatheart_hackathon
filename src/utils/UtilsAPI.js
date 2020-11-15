@@ -1,9 +1,18 @@
 import { API_BASE_URL, ACCESS_TOKEN, USER_ID } from './../constants';
-
+import inMemoryJWT from './inMemoryJWT'
 const request = (options) => {
-    const headers = new Headers({
-        'Content-Type': 'application/json',
-    })
+    let headers;
+    if (options.with_auth && inMemoryJWT.getToken != null) {
+        headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + inMemoryJWT.getToken(),
+        })
+    } else {
+        headers = new Headers({
+            'Content-Type': 'application/json',
+        })
+    }
+    console.log(headers.get('Authorization'));
 
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
@@ -22,9 +31,17 @@ const request = (options) => {
 };
 
 const request_without_response = (options) => {
-    const headers = new Headers({
-        'Content-Type': 'application/json',
-    })
+    let headers;
+    if (options.with_auth && inMemoryJWT.getToken != null) {
+        headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + inMemoryJWT.getToken(),
+        })
+    } else {
+        headers = new Headers({
+            'Content-Type': 'application/json',
+        })
+    }
 
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
@@ -35,14 +52,16 @@ const request_without_response = (options) => {
 export function getRequests() {
     return request({
         url: "requests/ward?status=1",
-        method : 'GET'
+        method : 'GET',
+        with_auth : true,
     });
 }
 
 export function getKanbanTableData(type) {
     return request({
         url: "requests/kanban?requestTypeId=" + type,
-        method : 'GET'
+        method : 'GET',
+        with_auth: true,
     });
 }
 
@@ -51,7 +70,8 @@ export function changeRequestStatus(modifiedData) {
     return request_without_response({
         url: "requests/change_status",
         method: 'POST',
-        body: JSON.stringify(modifiedData)
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
     });
 }
 
@@ -59,28 +79,32 @@ export function addCard(modifiedData) {
     return request({
         url: "requests/ward/create",
         method: 'POST',
-        body: JSON.stringify(modifiedData)
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
     });
 }
 
 export function getRequestData(id) {
     return request({
         url: "requests?id=" + id,
-        method : 'GET'
+        method : 'GET',
+        with_auth : true,
     });
 }
 
 export async function getRequestTypes() {
     return request({
         url: "requests/types",
-        method : 'GET'
+        method : 'GET',
+        with_auth: true,
     });
 }
 
 export function filterByRequestType(requestTypeId) {
     return request({
         url: "requests/kanban?requestTypeId=" + requestTypeId,
-        method : 'GET'
+        method : 'GET',
+        with_auth : true,
     });
 }
 
@@ -89,7 +113,8 @@ export function createNewRequest(modifiedData) {
     return request({
         url: "requests/create",
         method: 'POST',
-        body: JSON.stringify(modifiedData)
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
     });
 }
 
@@ -98,7 +123,8 @@ export function changeRequest(modifiedData) {
     return request({
         url: "/requests/change",
         method: 'POST',
-        body: JSON.stringify(modifiedData)
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
     });
 }
 
@@ -106,6 +132,7 @@ export function getHandbookTypes() {
     return request({
         url: "entities/mainTypes",
         method: 'GET',
+        with_auth:true,
     });
 }
 
@@ -113,6 +140,7 @@ export function getEntities(id) {
     return request({
         url: "entities/" + id,
         method: 'GET',
+        with_auth:true,
     });
 }
 
@@ -120,5 +148,22 @@ export function getEntityInfo(entity_id, enum_type) {
     return request({
         url: "entities/" + entity_id + '/' + enum_type,
         method: 'GET',
+        with_auth:true,
+    });
+}
+
+export function signUp(user) {
+    return request({
+        url: "auth/sign_up",
+        method: 'POST',
+        body: JSON.stringify(user)
+    });
+}
+
+export function signIn(user) {
+    return request({
+        url: "auth/sign_in",
+        method: 'POST',
+        body: JSON.stringify(user)
     });
 }

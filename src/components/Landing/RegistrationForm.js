@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import { Form } from 'react-final-form'
 import { Field } from 'react-final-form-html5-validation'
-// import { signup } from './../../utils/APIUtils'
 import {Link} from "react-router-dom";
+import {signIn, signUp} from './../../utils/UtilsAPI'
+import inMemoryJWT from './../../utils/inMemoryJWT'
+import { withRouter } from 'react-router-dom';
 
 class SignUpForm extends Component {
 
@@ -17,10 +19,18 @@ class SignUpForm extends Component {
     }
 
     onSubmit = (values) => {
-        // signup(values)
-        // .then(console.log(values))
-        // .then(this.props.history.push("/"))
-        // window.alert(JSON.stringify(values, 0, 2));
+        console.log(values);
+        values.roles = ["all"]; //TODO
+        console.log(values);
+        let props = this.props;
+        signUp(values).then(_ => {
+            signIn(values).then(response => {
+                inMemoryJWT.setToken(response.body);
+                props.history.push({
+                    pathname: `/user`,
+                })
+            })
+        });
     }
 
     render() {
@@ -35,11 +45,9 @@ class SignUpForm extends Component {
                             <form id={"reg"} onSubmit={handleSubmit} style={{ padding: 15 }}>
                                 <div className="container login__form">
                                     <Field
-                                        name="email"
-                                        type="email"
-                                        typeMismatch="Введите корректный email адрес"
+                                        name="login"
                                         component="input"
-                                        placeholder="Email"
+                                        placeholder="Логин"
                                         required
                                         valueMissing="Необходимо ввести значение"
                                     />
@@ -52,11 +60,12 @@ class SignUpForm extends Component {
                                         required
                                         valueMissing="Необходимо ввести значение"
                                     />
-                                <button type="submit" className="btn__signin">
+                                <button onClick="" type="submit" className="btn__signin">
                                     Зарегистрироваться
                                 </button>
-                                    <Link to="/">
-                                        <button id="btn_req" name="btn_req" className="btn__req">На главную страницу</button></Link>
+                                <Link to="/">
+                                    <button id="btn_req" name="btn_req" className="btn__req">На главную страницу</button>
+                                </Link>
                                 </div>
                             </form>
                         )}
@@ -67,4 +76,4 @@ class SignUpForm extends Component {
     }
 }
  
-export default SignUpForm;
+export default withRouter(SignUpForm);
