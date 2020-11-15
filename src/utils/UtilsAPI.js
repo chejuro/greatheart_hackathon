@@ -160,6 +160,14 @@ export function getEntities(id) {
     });
 }
 
+export function getMainEntities() {
+    return request({
+        url: "entities/mainEntities",
+        method: 'GET',
+        with_auth:true,
+    });
+}
+
 export function getEntityInfo(entity_type_id, entity_id, post_id, field_key) {
     return request({
         url: "entities/" + entity_type_id + '/' + entity_id,
@@ -196,6 +204,16 @@ export function addEntityType(modifiedData) {
     console.log(JSON.stringify(modifiedData));
     return request({
         url: "/entities/addEntityType",
+        method: 'POST',
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
+    });
+}
+
+export function addEntity(entityType, modifiedData) {
+    console.log(JSON.stringify(modifiedData));
+    return request({
+        url: "/entities/addEntity?entityType=" + entityType,
         method: 'POST',
         body: JSON.stringify(modifiedData),
         with_auth : true,

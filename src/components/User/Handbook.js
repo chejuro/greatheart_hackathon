@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Card, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
-import { getEntities, getEntityInfo, getEntityType, getEnums } from '../../utils/UtilsAPI'
+import { getEntities, getEntityInfo, getEntityType, addEntity, getEnums, addEntityType, getMainEntities } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
@@ -13,7 +13,8 @@ class Handbook extends Component {
           entities: [],
           activeIndex: null,
           name: '',
-          enums: []
+          enums: [],
+          mainEntities: []
       };
 
       this.toggle = this.toggle.bind(this);
@@ -40,16 +41,23 @@ class Handbook extends Component {
             if (response.length != 0) {
               this.setState({
                 entities: response
-            })
-            }
+            })}
       });
-      // getEnums()
-      //     .then(response => {
-      //       this.setState({
-      //         enums: response
-      //     })
-      //     console.log(this.state.enums)
-      // });
+      getEnums()
+          .then(response => {
+            this.setState({
+              enums: response
+          })
+          console.log(this.state.enums)
+      });
+
+      getMainEntities()
+          .then(response => {
+            this.setState({
+              mainEntities: response
+          })
+          console.log(this.state.mainEntities)
+      });
     }
 
     modifyResponse(resp) {
@@ -111,6 +119,74 @@ class Handbook extends Component {
       }
     }
 
+    create_entity = () => {
+      // let title = document.getElementById("title").value
+      // let body = document.getElementById("body").value
+      // let request_type = 5
+      // let request = {
+      //   body: body,
+      //   requestType: request_type,
+      //   additionalInfo: {
+      //     some_shit : title
+      //   }
+      // }
+      // createNewRequest(request).then(window.location.reload())
+      let entity = {
+          "json": {
+              "контактное имя": "Исхакова Лилия",
+              "ВУЗ": "ВШЭ",
+              "Email личный": {
+                  "id": 6,
+                  "type": "entity",
+                  "entity_type": 2
+              },
+              "Должность": "Аналитик",
+              "Увлечения": "Гулять",
+              "Email рабочий": {
+                  "id": 7,
+                  "type": "entity",
+                  "entity_type": 2
+              },
+              "Мессенджер": {
+                  "id": 8,
+                  "type": "entity",
+                  "entity_type": 100000
+              },
+              "Доступность": {
+                  "id": 2,
+                  "type": "enum",
+                  "enum_type": 2
+              },
+              "Комментарий": "Бла-бла-бла",
+              "Место работы": "Ozon",
+              "День рождения": "13-02-1999",
+              "Телефон личный": {
+                  "id": 9,
+                  "type": "phone",
+                  "entity_type": 3
+              },
+              "Телефон рабочий": {
+                  "id": 9,
+                  "type": "phone",
+                  "entity_type": 3
+              },
+              "Город проживания": "Москва",
+              "Зона ответственности": "Помощь с CRM",
+              "Образование, специальность": "Программист",
+              "Доступность. Описание 'Другое'": "НИУ ВШЭ",
+              "Позиция в штатной структуре фонда": "Волонтёр",
+              "Уровень владения иностранными языками": {
+                  "id": 10,
+                  "type": "phone",
+                  "entity_type": 5
+              }
+          }
+      }
+      const query = new URLSearchParams(this.props.location.search);
+      console.log(this.state.entities)
+      // addEntity(query.get('id'), entity)
+    }
+
     render() {
       const { activeIndex } = this.state;
       let content = this.state.entities.map((post, index) => {
@@ -147,6 +223,20 @@ class Handbook extends Component {
                   <Modal isOpen={this.state.modal} toggle={this.toggle}>
                       <ModalHeader toggle={this.toggle}><h5 className="blackHeader">Создание запроса</h5></ModalHeader>
                       <ModalBody>
+                      {/* {this.state.fields.map(input => 
+                            <FormGroup row>
+                                <Label className="blackHeader">Новое поле</Label>
+                                <Input
+                                    type="text"
+                                    name="title"
+                                    id="title"
+                                />
+                                <Label className="blackHeader" check>
+                                    <Input type="checkbox" />{' '}
+                                    is Null
+                                </Label>
+                            </FormGroup>
+                      )} */}
                       <Form id="editForm">
                         <FormGroup>
                           <Label className="blackHeader">Наименование запроса</Label>
@@ -175,7 +265,7 @@ class Handbook extends Component {
                       </Form>
                       </ModalBody>
                       <ModalFooter>
-                          <button className="btn__req" onClick={this.create_request}>Создать</button>
+                          <button className="btn__req" onClick={this.create_entity}>Создать</button>
                           <button className="btn__signin" onClick={this.toggle}>Отмена</button>
                       </ModalFooter>
                   </Modal>
