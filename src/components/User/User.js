@@ -5,6 +5,7 @@ import './../../../node_modules/font-awesome/css/font-awesome.min.css';
 import UserMenuPanel from './UserMenuPanel';
 import UserInfo from './UserInfo';
 import HandbookTypes from './HandbookTypes';
+import HandbookCreate from './HandbookCreate';
 import Handbook from './Handbook';
 import KanbanTable from './KanbanTable';
 import CardPage from './CardPage';
@@ -49,6 +50,7 @@ class User extends Component {
                 <Route path="/" exact component={UserInfo} />
                 <Route path="/profile" exact component={UserInfo} />
                 <Route path="/handbook_types" component={HandbookTypes}/>
+                <Route path="/handbook_create" component={HandbookCreate}/>
                 <Route path="/handbook" component={Handbook}/>
                 <Route path="/kanban" component={KanbanTable}/>
                 <Route path="/card" component={CardPage}/>

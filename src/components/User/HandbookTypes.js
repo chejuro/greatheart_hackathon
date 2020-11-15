@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Card} from "reactstrap";
+import { Card, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
 import { NavLink } from 'react-router-dom';
-import { getHandbookTypes } from '../../utils/UtilsAPI'
+import { getHandbookTypes, addEntityType } from '../../utils/UtilsAPI'
 import { ListGroup, ListGroupItem } from 'reactstrap';
 
 
@@ -10,8 +10,11 @@ class HandbookTypes extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            modal: false,
         };
+        
+        this.create_handbook = this.create_handbook.bind(this);
     }
 
     componentDidMount() {
@@ -24,9 +27,14 @@ class HandbookTypes extends Component {
         });
     }
 
+    create_handbook = () => {
+        this.props.history.push({
+            pathname: "/handbook_create"
+        })
+    }
+
     render() {
         let content = this.state.data.map((handbook, index) => {
-            console.log(handbook.name)
             return (
               <li key={index}>
                 <div>
@@ -46,6 +54,7 @@ class HandbookTypes extends Component {
                     <ListGroup flush>
                         <ul>{content}</ul>
                     </ListGroup>
+                    <button id="btn_req" name="btn_req" className="btn__req" onClick={this.create_handbook}>Создать справочник</button>
                 </Card>
             </div>
         );

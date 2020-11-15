@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Card} from "reactstrap";
-import { getEntities, getEntityInfo } from '../../utils/UtilsAPI'
+import { Card, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
+import { getEntities, getEntityInfo, getEnums } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
@@ -12,7 +12,8 @@ class Handbook extends Component {
       this.state = {
           entities: [],
           activeIndex: null,
-          name: ''
+          name: '',
+          enums: []
       };
 
       this.toggle = this.toggle.bind(this);
@@ -24,30 +25,39 @@ class Handbook extends Component {
       console.log(query.get('id'))
       getEntities(query.get('id'))
           .then(response => {
-            this.setState({
-              entities: this.modifyResponse(response),
-              name: response[0].name
-          })  
+            if (response.length!==0){
+              this.setState({
+                entities: this.modifyResponse(response),
+                name: response[0].name
+            })} 
       });
+      // getEnums()
+      //     .then(response => {
+      //       this.setState({
+      //         enums: response
+      //     })
+      //     console.log(this.state.enums)
+      // });
     }
 
     modifyResponse(resp) {
       let posts = []
       console.log(resp);
+      // if (resp.length==0){
+      //   return posts
+      // }
       for (var i = 0; i < resp.length; i++) {
+        let title = resp[i].title
         let obj = resp[i].json
         if (obj.hasOwnProperty('best_friend_employee')) {
             getEntityInfo(obj.best_friend_employee.id, obj.best_friend_employee.enum_type)
               .then(response => {
                 obj.best_friend_employee = response[0].json.name
-                console.log(response[0].json.name)
-                console.log(obj)
               })
         }
-        console.log(obj)
         posts.push({
           id: i,
-          title: resp[i].title,
+          title: resp[i].json[title],
           message: <JsonToTable json={obj} />
         })
       }
@@ -116,8 +126,43 @@ class Handbook extends Component {
               <h3 className="blackHeader">{this.state.name}</h3>
               <Card>
                   <ul>{content}</ul>
+                  <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Создать запрос</button>
+                  <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                      <ModalHeader toggle={this.toggle}><h5 className="blackHeader">Создание запроса</h5></ModalHeader>
+                      <ModalBody>
+                      <Form id="editForm">
+                        <FormGroup>
+                          <Label className="blackHeader">Наименование запроса</Label>
+                          <Input
+                            type="text"
+                            name="title"
+                            id="title"
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label className="blackHeader">Описание</Label>
+                          <Input
+                            type="text"
+                            name="description"
+                            id="body"
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label className="blackHeader">Тип запроса</Label>
+                          <Input
+                            type="text"
+                            name="type_req"
+                            id="type_req"
+                          />
+                        </FormGroup>
+                      </Form>
+                      </ModalBody>
+                      <ModalFooter>
+                          <button className="btn__req" onClick={this.create_request}>Создать</button>
+                          <button className="btn__signin" onClick={this.toggle}>Отмена</button>
+                      </ModalFooter>
+                  </Modal>
               </Card>
-
           </div>
       );
     }

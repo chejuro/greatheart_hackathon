@@ -160,6 +160,34 @@ export function getEntityInfo(entity_id, enum_type) {
     });
 }
 
+export function getEnums() {
+    return request({
+        url: "enums/types",
+        method: 'GET',
+        with_auth:true,
+    });
+}
+
+export function addEnum(enum_id, modifiedData) {
+    console.log(JSON.stringify(modifiedData));
+    return request({
+        url: "/enums/addEnum?enumTypeId=" + enum_id,
+        method: 'POST',
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
+    });
+}
+
+export function addEntityType(modifiedData) {
+    console.log(JSON.stringify(modifiedData));
+    return request({
+        url: "/entities/addEntityType",
+        method: 'POST',
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
+    });
+}
+
 export function signUp(user) {
     return request({
         url: "auth/sign_up",
