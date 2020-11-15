@@ -144,6 +144,14 @@ export function getHandbookTypes() {
     });
 }
 
+export function getEntityType(id) {
+    return request({
+        url: "entities/mainType?entityTypeId=" + id,
+        method: 'GET',
+        with_auth:true,
+    });
+}
+
 export function getEntities(id) {
     return request({
         url: "entities/" + id,

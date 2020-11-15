@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Card} from "reactstrap";
-import { getEntities, getEntityInfo } from '../../utils/UtilsAPI'
+import { getEntities, getEntityInfo, getEntityType } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
@@ -22,16 +22,25 @@ class Handbook extends Component {
     componentDidMount() {
       const query = new URLSearchParams(this.props.location.search);
       console.log(query.get('id'))
-      getEntities(query.get('id'))
-      .then(response => {
-        return this.modifyResponse(response)
+
+      getEntityType(query.get('id')).then(response => {
+        this.setState({
+          name : response.body.name
+        })
       })
+
+      getEntities(query.get('id'))
           .then(response => {
             console.log(response)
-            this.setState({
-              entities: response,
-              name: response[0].name
-          })  
+            return this.modifyResponse(response)
+          })
+          .then(response => {
+            console.log(response)
+            if (response.length != 0) {
+              this.setState({
+                entities: response
+            })
+            }
       });
     }
 
