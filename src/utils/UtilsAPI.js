@@ -160,6 +160,14 @@ export function getEntities(id) {
     });
 }
 
+export function getFieldTypes() {
+    return request({
+        url : "fieldTypes",
+        method : 'GET',
+        with_auth : true,
+    });
+}
+
 export function getEntityInfo(entity_type_id, entity_id, post_id, field_key) {
     return request({
         url: "entities/" + entity_type_id + '/' + entity_id,
