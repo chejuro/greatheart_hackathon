@@ -160,19 +160,19 @@ export function getEntities(id) {
     });
 }
 
-<<<<<<< HEAD
 export function getMainEntities() {
     return request({
         url: "entities/mainEntities",
         method: 'GET',
         with_auth:true,
-=======
+    });
+}
+
 export function getFieldTypes() {
     return request({
         url : "fieldTypes",
         method : 'GET',
         with_auth : true,
->>>>>>> ae8b22049b340fe52398fc2d1da41e6d6081ecfc
     });
 }
 

@@ -14,11 +14,24 @@ class Handbook extends Component {
           activeIndex: null,
           name: '',
           enums: [],
-          mainEntities: []
+          mainEntities: [],
+          necessaryFields: [],
+          unnecessaryFields : [],
       };
 
       this.toggle = this.toggle.bind(this);
       this.toggleClass = this.toggleClass.bind(this);
+    }
+
+    convertType(type) {
+      if (type == "phone") {
+        return "text";
+      } else if (type == "string") {
+        return "text";
+      } else if (type == "boolean") {
+        return "checkbox";
+      }
+      return type
     }
 
     componentDidMount() {
@@ -26,9 +39,29 @@ class Handbook extends Component {
       console.log(query.get('id'))
 
       getEntityType(query.get('id')).then(response => {
+        let necessaryFields = []
+        let unnecessaryFields = []
+        for (var i in response.body.necessaryFields) {
+          console.log(i);
+          let field = {
+            name : i,
+            type : this.convertType(response.body.necessaryFields[i].type),
+            notnull : response.body.necessaryFields[i].notnull,
+          };
+          if (field.notnull) {
+            necessaryFields.push(field)
+          } else {
+            unnecessaryFields.push(field)
+          }
+        }
         this.setState({
-          name : response.body.name
-        })
+          name : response.body.name,
+          necessaryFields : necessaryFields,
+          unnecessaryFields : unnecessaryFields
+        });
+        console.log("necessary fields");
+        console.log(this.state.necessaryFields);
+        this.forceUpdate();
       })
 
       getEntities(query.get('id'))
@@ -112,71 +145,39 @@ class Handbook extends Component {
     }
 
     create_entity = () => {
-      // let title = document.getElementById("title").value
-      // let body = document.getElementById("body").value
-      // let request_type = 5
-      // let request = {
-      //   body: body,
-      //   requestType: request_type,
-      //   additionalInfo: {
-      //     some_shit : title
-      //   }
-      // }
-      // createNewRequest(request).then(window.location.reload())
-      let entity = {
-          "json": {
-              "контактное имя": "Исхакова Лилия",
-              "ВУЗ": "ВШЭ",
-              "Email личный": {
-                  "id": 6,
-                  "type": "entity",
-                  "entity_type": 2
-              },
-              "Должность": "Аналитик",
-              "Увлечения": "Гулять",
-              "Email рабочий": {
-                  "id": 7,
-                  "type": "entity",
-                  "entity_type": 2
-              },
-              "Мессенджер": {
-                  "id": 8,
-                  "type": "entity",
-                  "entity_type": 100000
-              },
-              "Доступность": {
-                  "id": 2,
-                  "type": "enum",
-                  "enum_type": 2
-              },
-              "Комментарий": "Бла-бла-бла",
-              "Место работы": "Ozon",
-              "День рождения": "13-02-1999",
-              "Телефон личный": {
-                  "id": 9,
-                  "type": "phone",
-                  "entity_type": 3
-              },
-              "Телефон рабочий": {
-                  "id": 9,
-                  "type": "phone",
-                  "entity_type": 3
-              },
-              "Город проживания": "Москва",
-              "Зона ответственности": "Помощь с CRM",
-              "Образование, специальность": "Программист",
-              "Доступность. Описание 'Другое'": "НИУ ВШЭ",
-              "Позиция в штатной структуре фонда": "Волонтёр",
-              "Уровень владения иностранными языками": {
-                  "id": 10,
-                  "type": "phone",
-                  "entity_type": 5
-              }
-          }
+      let entity = {}
+      for (var i in this.state.necessaryFields) {
+        let field = this.state.necessaryFields[i];
+        let value;
+        if (field.type == "checkbox") {
+          value = document.getElementById(field.name).checked.toString();
+        } else {
+          value = document.getElementById(field.name).value;
+        }
+        if (value != "") {
+          entity[field.name] = value;
+        }
       }
+      for (var i in this.state.unnecessaryFields) {
+        let field = this.state.unnecessaryFields[i];
+        let value;
+        if (field.type == "checkbox") {
+          value = document.getElementById(field.name).checked.toString();
+        } else {
+          value = document.getElementById(field.name).value;
+        }
+        if (value != "") {
+          entity[field.name] = value;
+        }
+      }
+      console.log(entity);
       const query = new URLSearchParams(this.props.location.search);
-      console.log(this.state.entities)
-      // addEntity(query.get('id'), entity)
+      addEntity(query.get('id'), {
+        json : entity
+      }).then(_ => {
+        this.toggle();
+        this.componentDidMount();
+      });
     }
 
     render() {
@@ -211,49 +212,35 @@ class Handbook extends Component {
               <h3 className="blackHeader">{this.state.name}</h3>
               <Card>
                   <ul>{content}</ul>
-                  <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Создать запрос</button>
+                  <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Добавить запись</button>
                   <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                      <ModalHeader toggle={this.toggle}><h5 className="blackHeader">Создание запроса</h5></ModalHeader>
+                      <ModalHeader toggle={this.toggle}><h5 className="blackHeader">Добавление записи</h5></ModalHeader>
                       <ModalBody>
-                      {/* {this.state.fields.map(input => 
-                            <FormGroup row>
-                                <Label className="blackHeader">Новое поле</Label>
-                                <Input
-                                    type="text"
-                                    name="title"
-                                    id="title"
-                                />
-                                <Label className="blackHeader" check>
-                                    <Input type="checkbox" />{' '}
-                                    is Null
-                                </Label>
-                            </FormGroup>
-                      )} */}
-                      <Form id="editForm">
-                        <FormGroup>
-                          <Label className="blackHeader">Наименование запроса</Label>
-                          <Input
-                            type="text"
-                            name="title"
-                            id="title"
-                          />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label className="blackHeader">Описание</Label>
-                          <Input
-                            type="text"
-                            name="description"
-                            id="body"
-                          />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label className="blackHeader">Тип запроса</Label>
-                          <Input
-                            type="text"
-                            name="type_req"
-                            id="type_req"
-                          />
-                        </FormGroup>
+                    
+                       <Form id="editForm">
+                         <Label className="blackHeader">Обязательные поля</Label>
+                        {this.state.necessaryFields.map(input => 
+                              <FormGroup row>
+                                  <Label className="blackHeader">{input.name}</Label>
+                                   <Input
+                                      type={input.type}
+                                      name="title"  
+                                      id={input.name}
+                                  />
+                              </FormGroup>
+                        )}
+                        <br/>
+                        <Label className="blackHeader">Необязательные поля</Label>
+                        {this.state.unnecessaryFields.map(input => 
+                              <FormGroup row>
+                                  <Label className="blackHeader">{input.name}</Label>
+                                   <Input
+                                      type="text"
+                                      name="title"  
+                                      id={input.name}
+                                  />
+                              </FormGroup>
+                        )}
                       </Form>
                       </ModalBody>
                       <ModalFooter>
