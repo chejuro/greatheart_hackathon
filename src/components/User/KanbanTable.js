@@ -6,7 +6,7 @@ import './../../App.css';
 import {getKanbanTableData, changeRequestStatus, createNewRequest, getRequestTypes,
         filterByRequestType } from './../../utils/UtilsAPI'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, 
-        Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+        Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
 
 
 const cardStyle = { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 }
@@ -20,6 +20,7 @@ class KanbanTable extends Component {
       modal: false,
       data: { lanes: [] },
       types: [],
+      filter: '',
       dropdownOpen : false
     }
 
@@ -89,6 +90,9 @@ class KanbanTable extends Component {
     console.log(this.props.location)
     let id = query.get('typeId')
     let params = query.get('body')
+    this.setState({
+      filter: params
+    })
 
     getKanbanTableData(id, params)
       .then(response => {
@@ -151,11 +155,19 @@ class KanbanTable extends Component {
 
   findBytext() {
     let text = document.getElementById("findbytext").value
-    console.log(text)
     let cur_typeId = this.state.currentTypeId
+    
+    console.log(text)
+    let params = ""
+    if (text === ""){
+      params = `typeId=${cur_typeId}`
+    }
+    else {
+      params = `typeId=${cur_typeId}&body=${text}`
+    }
     this.props.history.push({
       pathname: `/kanban`,
-      search: `typeId=${cur_typeId}&body=${text}`
+      search: params
     })
     window.location.reload()
   }
@@ -191,8 +203,9 @@ class KanbanTable extends Component {
               <Input
                 type="text"
                 id="findbytext"
+                defaultValue={this.state.filter}
               />
-              <button className="btn__req" onClick={this.findBytext}>Найти</button>
+              <Button className="btn__req" onClick={this.findBytext}>Найти</Button>
             </FormGroup>
           </Form>
         </div>
