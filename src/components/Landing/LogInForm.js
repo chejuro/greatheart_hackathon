@@ -29,6 +29,7 @@ class LogInForm extends Component {
         let props = this.props;
         signIn(values).then(response => {
             inMemoryJWT.setToken(response.body);
+            inMemoryJWT.setLogin(values.login);
             props.history.push({
                 pathname: `/user`,
             })

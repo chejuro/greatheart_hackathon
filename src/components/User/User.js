@@ -10,6 +10,7 @@ import Handbook from './Handbook';
 import KanbanTable from './KanbanTable';
 import CardPage from './CardPage';
 import styled from 'styled-components';
+import inMemoryJWT from './../../utils/inMemoryJWT'
 import './../../App.css';
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
@@ -25,6 +26,10 @@ const Main = styled.main`
 class User extends Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+
     }
 
     state = {

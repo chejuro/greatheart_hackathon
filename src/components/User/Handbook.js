@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import { Card, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
-import { getEntities, getEntityInfo, getEntityType, addEntity, getEnums, addEntityType } from '../../utils/UtilsAPI'
+import { getEntities, getEntityInfo, getEntityType, addEntity, getEnums, addEntityType, sendDonation } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
+import inMemoryJWT from './../../utils/inMemoryJWT'
 
 
 class Handbook extends Component {
@@ -17,10 +18,14 @@ class Handbook extends Component {
           mainEntities: [],
           necessaryFields: [],
           unnecessaryFields : [],
+          modal_donation: false,
+          last_ent_id: ''
       };
 
       this.toggle = this.toggle.bind(this);
+      this.toggle_donation = this.toggle_donation.bind(this);
       this.toggleClass = this.toggleClass.bind(this);
+      this.send_donation = this.send_donation.bind(this);
     }
 
     convertType(type) {
@@ -106,6 +111,7 @@ class Handbook extends Component {
         let posts = []
         for (var i in resp) {
           posts.push({
+            resp_i: resp[i].id,
             id: i,
             title: resp[i].json[resp[i].title],
             message: <JsonToTable json={resp[i].json} />
@@ -120,6 +126,18 @@ class Handbook extends Component {
             modal: !prevState.modal
         }));
         console.log(this.state.modal)
+    }
+
+    toggle_donation(event) {
+      let id = event.target.id;
+      console.log(id)
+      this.setState({
+        last_ent_id: id
+      })
+      this.setState(prevState => ({
+        modal_donation: !prevState.modal_donation
+      }));
+      console.log(this.state.modal_donation)
     }
 
     toggleClass(index, e) {
@@ -180,7 +198,28 @@ class Handbook extends Component {
       });
     }
 
+    send_donation(event) {
+      let entity_id = this.state.last_ent_id
+      let sum = document.getElementById("sum").value
+      let desc = document.getElementById("desc").value
+      var today = new Date();
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();;
+
+      let donation = {
+        login: inMemoryJWT.getLogin(),
+        amount: Number(sum),
+        description: desc,
+        entityId: entity_id,
+        timestamp: date
+      }
+      
+      sendDonation(donation)
+      window.location.reload()
+    }
+
     render() {
+      console.log(this.state.entities)
       const { activeIndex } = this.state;
       let content = this.state.entities.map((post, index) => {
           return (
@@ -195,6 +234,7 @@ class Handbook extends Component {
                     })}
                   >
                     {post.message}
+                    <button id={post.resp_i} name={"btn_" + post.id} className="btn__req" onClick={this.toggle_donation}>Создать запрос</button>
                   </div>
                 </Collapse>
                 <button
@@ -212,6 +252,33 @@ class Handbook extends Component {
               <h3 className="blackHeader">{this.state.name}</h3>
               <Card>
                   <ul>{content}</ul>
+                  <Modal isOpen={this.state.modal_donation} toggle={this.toggle_donation}>
+                      <ModalHeader toggle={this.toggle_donation}><h5 className="blackHeader">Создание пожертвования</h5></ModalHeader>
+                      <ModalBody>
+                      <Form id="editForm">
+                        <FormGroup>
+                          <Label className="blackHeader">Сумма</Label>
+                          <Input
+                            type="text"
+                            name="title"
+                            id="sum"
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label className="blackHeader">Описание</Label>
+                          <Input
+                            type="text"
+                            name="description"
+                            id="desc"
+                          />
+                        </FormGroup>
+                      </Form>
+                      </ModalBody>
+                      <ModalFooter id='mf'>
+                          <button className="btn__req" onClick={this.send_donation}>Создать</button>
+                          <button className="btn__signin" onClick={this.toggle_donation}>Отмена</button>
+                      </ModalFooter>
+                  </Modal>
                   <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle}>Добавить запись</button>
                   <Modal isOpen={this.state.modal} toggle={this.toggle}>
                       <ModalHeader toggle={this.toggle}><h5 className="blackHeader">Добавление записи</h5></ModalHeader>

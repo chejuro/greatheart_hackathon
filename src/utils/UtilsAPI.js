@@ -243,3 +243,12 @@ export function signIn(user) {
         body: JSON.stringify(user)
     });
 }
+
+export function sendDonation(modifiedData) {
+    return request({
+        url: "/blockchain/donation",
+        method: 'POST',
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
+    });
+}
