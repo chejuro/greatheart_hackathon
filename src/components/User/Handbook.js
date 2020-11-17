@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Card, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
-import { getEntities, getEntityInfo, getEntityType, addEntity, getEnums, addEntityType } from '../../utils/UtilsAPI'
+import { getEntities, getEntityInfo, getEntityType, addEntity, getEnums, addEntityType, getEnumValues } from '../../utils/UtilsAPI'
 import { JsonToTable } from "react-json-to-table";
 import { Collapse } from "react-collapse";
 import classNames from "classnames";
@@ -17,6 +17,7 @@ class Handbook extends Component {
           mainEntities: [],
           necessaryFields: [],
           unnecessaryFields : [],
+          enumValues : {},
       };
 
       this.toggle = this.toggle.bind(this);
@@ -48,6 +49,17 @@ class Handbook extends Component {
             type : this.convertType(response.body.necessaryFields[i].type),
             notnull : response.body.necessaryFields[i].notnull,
           };
+          if (field.type == "enum") {
+              field.enum_type_id = response.body.necessaryFields[i].enum_type_id;
+              getEnumValues(response.body.necessaryFields[i].enum_type_id).then(response => {
+                let allEnumValues = this.state.enumValues;
+                allEnumValues[response.body[0].enumTypeId] = response.body;
+                this.setState({
+                    enumValues : allEnumValues,
+                });
+                console.log(this.state);
+              });
+          }
           if (field.notnull) {
             necessaryFields.push(field)
           } else {
@@ -143,6 +155,12 @@ class Handbook extends Component {
         );
       }
     }
+    
+    handleChangeEnumValue = (input, e) => {
+      // input.value = e.target.value;
+      // this.forceUpdate();
+      // console.log(this.state);
+    }
 
     create_entity = () => {
       let entity = {}
@@ -151,11 +169,21 @@ class Handbook extends Component {
         let value;
         if (field.type == "checkbox") {
           value = document.getElementById(field.name).checked.toString();
-        } else {
+        } else if (field.type != "enum"){
           value = document.getElementById(field.name).value;
         }
-        if (value != "") {
+        if (value != "" && field.type != "enum") {
           entity[field.name] = value;
+        } else if (field.type == "enum") {
+          let element = document.getElementById(field.name);
+          console.log("ELEMENT");
+          console.log(element);
+          let _enum = {
+            id : parseInt(element.value, 10),
+            enum_type : parseInt(element.getAttribute("type"), 10),
+            type : "enum"
+          };
+          entity[field.name] = _enum;
         }
       }
       for (var i in this.state.unnecessaryFields) {
@@ -163,11 +191,21 @@ class Handbook extends Component {
         let value;
         if (field.type == "checkbox") {
           value = document.getElementById(field.name).checked.toString();
-        } else {
+        } else if (field.type != "enum"){
           value = document.getElementById(field.name).value;
         }
-        if (value != "") {
+        if (value != "" && field.type != "enum") {
           entity[field.name] = value;
+        } else if (field.type == "enum") {
+          let element = document.getElementById(field.name);
+          console.log("ELEMENT");
+          console.log(element);
+          let _enum = {
+            id : parseInt(element.value, 10),
+            enum_type : parseInt(element.getAttribute("type"), 10),
+            type : "enum"
+          };
+          entity[field.name] = _enum;
         }
       }
       console.log(entity);
@@ -222,11 +260,19 @@ class Handbook extends Component {
                         {this.state.necessaryFields.map(input => 
                               <FormGroup row>
                                   <Label className="blackHeader">{input.name}</Label>
+                                 {input.type != "enum" &&
                                    <Input
                                       type={input.type}
                                       name="title"  
                                       id={input.name}
-                                  />
+                        /> }
+                                 {input.type == "enum" && this.state.enumValues[input.enum_type_id] != null && 
+                                    <select id={input.name} type={input.enum_type_id} onChange={(e) => this.handleChangeEnumValue(input, e)}>
+                                             {this.state.enumValues[input.enum_type_id].map(_enum => 
+                                                 <option value={_enum.id}>{_enum.name}</option>
+                                             )}
+                                         </select>
+                                  } 
                               </FormGroup>
                         )}
                         <br/>
@@ -235,7 +281,7 @@ class Handbook extends Component {
                               <FormGroup row>
                                   <Label className="blackHeader">{input.name}</Label>
                                    <Input
-                                      type="text"
+                                      type={input.type}
                                       name="title"  
                                       id={input.name}
                                   />

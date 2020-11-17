@@ -198,6 +198,14 @@ export function getEnums() {
     });
 }
 
+export function getEnumValues(id) {
+    return request({
+        url : "enums/elements?enumTypeId=" + id,
+        method: 'GET',
+        with_auth : true,
+    });
+}
+
 export function addEnum(enum_id, modifiedData) {
     console.log(JSON.stringify(modifiedData));
     return request({
