@@ -252,8 +252,10 @@ class Handbook extends Component {
         timestamp: date
       }
       
-      sendDonation(donation)
-      window.location.reload()
+      sendDonation(donation).then(response => {
+        window.location.reload()
+        console.log(response);
+      })
     }
 
     render() {
@@ -327,12 +329,11 @@ class Handbook extends Component {
                         {this.state.necessaryFields.map(input => 
                               <FormGroup row>
                                   <Label className="blackHeader">{input.name}</Label>
-                                 {input.type != "enum" &&
+                                 {input.type != "enum" && 
                                    <Input
                                       type={input.type}
                                       name="title"  
-                                      id={input.name}
-                        /> }
+                                      id={input.name}/>}
                                  {input.type == "enum" && this.state.enumValues[input.enum_type_id] != null && 
                                     <select id={input.name} type={input.enum_type_id} onChange={(e) => this.handleChangeEnumValue(input, e)}>
                                              {this.state.enumValues[input.enum_type_id].map(_enum => 

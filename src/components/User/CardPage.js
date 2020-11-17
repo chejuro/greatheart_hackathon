@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import { Card, CardTitle, CardImg, CardBody, Col, Row } from 'reactstrap';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { withRouter } from "react-router-dom";
-import { getRequestData, changeRequest } from './../../utils/UtilsAPI'
+import { getRequestData, changeRequest, getComments, sendComment } from './../../utils/UtilsAPI'
 import './../../css/User.css';
 import './../../App.css';
+import inMemoryJWT from '../../utils/inMemoryJWT';
 
 
 class CardPage extends Component {
@@ -12,7 +13,8 @@ class CardPage extends Component {
     super(props);
     this.state = {
         data: {},
-        request_id: ''
+        request_id: '',
+        comments : []
     };
   }
 
@@ -21,15 +23,22 @@ class CardPage extends Component {
     console.log(query.get('id'))
     getRequestData(query.get('id'))
       .then(response => {
+        this.setState({
+          data: response.body,
+          request_id: query.get('id')
+        })
+        console.log(this.state.data);
+        getComments(this.state.data.comments).then(resp => {
+          console.log("comments");
           this.setState({
-              data: response.body,
-              request_id: query.get('id')
-      })
-      console.log(this.state.data);
-      console.log(this.state.data.additionalInfo.some_shit);
-      console.log(this.state.request_id);
+              comments : resp.body
+          });
+          console.log(this.state.comments);
+          this.forceUpdate();
+        })   
+      this.forceUpdate();
     });
-    this.forceUpdate()
+    this.forceUpdate();
   }
 
   change_request = () => {
@@ -45,6 +54,25 @@ class CardPage extends Component {
       }
     }
     changeRequest(request).then(window.location.reload())
+  }
+
+  parseDate = (str) => {
+    let date = str.substring(0, str.indexOf('T'));
+    let time = str.substring(str.indexOf('T') + 1, str.indexOf('.'));
+    return date + " " + time;
+  }
+
+  handleClick = (e) => {
+    let comment = {
+      login : inMemoryJWT.getLogin(),
+      message : document.getElementById("message").value,
+      requestId : parseInt(this.state.request_id, 10),
+    };
+    console.log(comment);
+    sendComment(comment).then(response => {
+      document.getElementById("message").value = "";
+      this.componentDidMount();
+    });
   }
 
   render() {
@@ -99,19 +127,21 @@ class CardPage extends Component {
                       {/* Комментарии */}
                       <Card>
                           <CardBody>
-                              <p className="blackHeader">Запрос не готов для передачи на исполнение ...</p>
+
+                            {this.state.comments.map(comment => 
+                              <div><b>[{this.parseDate(comment.creation)}] {comment.login} : {comment.message}</b> </div>
+                            )}
+
+                              {/* <p className="blackHeader">Запрос не готов для передачи на исполнение ...</p> */}
                               
                           </CardBody>
                       </Card>
                       <Form>
                       <FormGroup>
                         <h8 className="blackHeader">Оставить комментарий</h8>
-                        <Input type="textarea" name="text" id="exampleText" />
+                        <Input type="textarea" name="text" id="message"/>
                       </FormGroup>
-                      <FormGroup>
-                        <Input type="file" name="file" id="exampleFile" />
-                      </FormGroup>
-                      <Button>Submit</Button>
+                      <Button onClick={this.handleClick}>Отправить</Button>
                     </Form>
                   </div>
               </div>

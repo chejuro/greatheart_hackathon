@@ -92,6 +92,27 @@ export function addCard(modifiedData) {
     });
 }
 
+export function sendComment(comment) {
+    return request({
+        url: "requests/comments",
+        method: 'POST',
+        body: JSON.stringify(comment),
+        with_auth : true,
+    });
+}
+
+export function getComments(ids) {
+    let str = "";
+    for (var id in ids) {
+        str += ids[id] + ",";
+    }
+    return request({
+        url : "requests/comments?commentsIds=" + str,
+        method : 'GET',
+        with_auth : true,
+    });
+}
+
 export function getRequestData(id) {
     return request({
         url: "requests?id=" + id,
@@ -233,6 +254,14 @@ export function addEntity(entityType, modifiedData) {
         method: 'POST',
         body: JSON.stringify(modifiedData),
         with_auth : true,
+    });
+}
+
+export function getProfile(login) {
+    return request({
+        url : "profile?login=" + login,
+        method : 'GET',
+        with_auth : true
     });
 }
 
