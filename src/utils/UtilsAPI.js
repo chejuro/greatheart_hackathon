@@ -281,6 +281,15 @@ export function signIn(user) {
     });
 }
 
+export function sendConsumption(modifiedData) {
+    return request({
+        url : "/blockchain/consumption",
+        method: 'POST',
+        body: JSON.stringify(modifiedData),
+        with_auth : true,
+    })
+}
+
 export function sendDonation(modifiedData) {
     return request({
         url: "/blockchain/donation",

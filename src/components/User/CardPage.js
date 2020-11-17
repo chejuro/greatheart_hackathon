@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { Card, CardTitle, CardImg, CardBody, Col, Row } from 'reactstrap';
+import { Card, CardTitle, CardImg, CardBody, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { withRouter } from "react-router-dom";
-import { getRequestData, changeRequest, getComments, sendComment } from './../../utils/UtilsAPI'
+import { getRequestData, changeRequest, getComments, sendComment, sendConsumption } from './../../utils/UtilsAPI'
 import './../../css/User.css';
 import './../../App.css';
 import inMemoryJWT from '../../utils/inMemoryJWT';
@@ -14,7 +14,8 @@ class CardPage extends Component {
     this.state = {
         data: {},
         request_id: '',
-        comments : []
+        comments : [],
+        modal_consumption: false,
     };
   }
 
@@ -75,6 +76,33 @@ class CardPage extends Component {
     });
   }
 
+  toggle_consumption = () => {
+    this.setState({
+      modal_consumption : !this.state.modal_consumption
+    })
+  }
+
+  send_consumption = () => {
+    let sum = document.getElementById("sum").value
+    let desc = document.getElementById("desc").value
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();;
+
+    let consumption = {
+      login: inMemoryJWT.getLogin(),
+      amount: Number(sum),
+      description: desc,
+      entityId: parseInt(this.state.request_id, 10),
+      timestamp: date
+    }
+    console.log(consumption);
+    sendConsumption(consumption).then(response => {
+      window.location.reload()
+      console.log(response);
+    })
+  }
+
   render() {
     let flag = "";
     if (this.state.data.hasOwnProperty('additionalInfo')){
@@ -84,6 +112,35 @@ class CardPage extends Component {
         <div className="container-fluid">
           <h3 className="blackHeader">Запрос</h3>
           <Card>
+
+                  <Modal isOpen={this.state.modal_consumption} toggle={this.toggle_consumption}>
+                      <ModalHeader toggle={this.toggle_consumption}><h5 className="blackHeader">Добавление затрат</h5></ModalHeader>
+                      <ModalBody>
+                      <Form id="editForm">
+                        <FormGroup>
+                          <Label className="blackHeader">Сумма</Label>
+                          <Input
+                            type="text"
+                            name="title"
+                            id="sum"
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label className="blackHeader">Описание</Label>
+                          <Input
+                            type="text"
+                            name="description"
+                            id="desc"
+                          />
+                        </FormGroup>
+                      </Form>
+                      </ModalBody>
+                      <ModalFooter id='mf'>
+                          <button className="btn__req" onClick={this.send_consumption}>Добавить</button>
+                          <button className="btn__signin" onClick={this.toggle_consumption}>Отмена</button>
+                      </ModalFooter>
+                  </Modal>
+
               <div className="row justify-content-around">
                   <div className="col-lg-5">
                     <h4 className="blackHeader">Информация</h4>
@@ -118,6 +175,8 @@ class CardPage extends Component {
                                     defaultValue={this.state.data.registrationDate}
                                   />
                                 </FormGroup>
+
+
                               </Form>
                           </CardBody>
                       </Card>
@@ -127,13 +186,9 @@ class CardPage extends Component {
                       {/* Комментарии */}
                       <Card>
                           <CardBody>
-
                             {this.state.comments.map(comment => 
                               <div><b>[{this.parseDate(comment.creation)}] {comment.login} : {comment.message}</b> </div>
-                            )}
-
-                              {/* <p className="blackHeader">Запрос не готов для передачи на исполнение ...</p> */}
-                              
+                            )}                              
                           </CardBody>
                       </Card>
                       <Form>
@@ -146,6 +201,7 @@ class CardPage extends Component {
                   </div>
               </div>
           </Card>
+          <button id="btn_req" name="btn_req" className="btn__req" onClick={this.toggle_consumption}>Добавить затраты</button>
           <button id="btn_req" name="btn_req" className="btn__req" onClick={this.change_request}>Сохранить</button>
       </div>
     );
