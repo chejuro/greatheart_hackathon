@@ -3,10 +3,17 @@ const inMemoryJWTManager = () => {
 
     const getToken = () => localStorage.getItem('token');
 
+    const getLogin = () => localStorage.getItem('login');
+
     const setToken = (token) => {
         localStorage.setItem('token', token)
         return true;
     };
+
+    const setLogin = (login) => {
+        localStorage.setItem('login', login)
+        return true;
+    }
 
     const ereaseToken = () => {
         localStorage.setItem('token', null)
@@ -17,6 +24,8 @@ const inMemoryJWTManager = () => {
         ereaseToken,
         getToken,
         setToken,
+        getLogin,
+        setLogin
     }
 };
 
