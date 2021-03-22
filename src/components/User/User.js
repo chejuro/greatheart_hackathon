@@ -67,14 +67,6 @@ class User extends Component {
                     <SideNav  style={{ position: 'fixed', zIndex: '1500'}} onToggle={this.onToggle}>
                         <SideNav.Toggle />
                         <SideNav.Nav defaultSelected="profile">
-                            <NavItem eventKey="profile">
-                                <NavIcon>
-                                    <NavLink exact to="/profile"><i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} /></NavLink>
-                                </NavIcon>
-                                <NavText>
-                                    <NavLink exact to="/profile">Профиль</NavLink>
-                                </NavText>
-                            </NavItem>
                             <NavItem eventKey="kanban">
                                 <NavIcon>
                                     <NavLink exact to={{
@@ -95,14 +87,6 @@ class User extends Component {
                                 </NavIcon>
                                 <NavText>
                                     <NavLink exact to="/handbook_types"><MyLink expanded={expanded}>Справочники</MyLink></NavLink>
-                                </NavText>
-                            </NavItem>
-                            <NavItem eventKey="help">
-                                <NavIcon>
-                                    <NavLink to="/help"><i className="fa fa-fw fa-question-circle" style={{ fontSize: '1.75em' }} /></NavLink>
-                                </NavIcon>
-                                <NavText>
-                                    <NavLink to="/help">Связь с поддержкой</NavLink>
                                 </NavText>
                             </NavItem>
                         </SideNav.Nav>
