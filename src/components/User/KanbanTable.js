@@ -21,8 +21,9 @@ class KanbanTable extends Component {
       data: { lanes: [] },
       types: [],
       filter: '',
-      dropdownOpen : false
-    }
+      dropdownOpen : false,
+      selectedType : 5,
+    };
 
     this.toggle = this.toggle.bind(this);
     this.create_request = this.create_request.bind(this);
@@ -129,12 +130,13 @@ class KanbanTable extends Component {
   }
 
   create_request = () => {
-    let title = document.getElementById("title").value
-    let body = document.getElementById("body").value
-    let request_type = 5
+    let title = document.getElementById("title").value;
+    let body = document.getElementById("body").value;
+    console.log("hello, world");
+    console.log(this.state.selectedType);
     let request = {
       body: body,
-      requestType: request_type,
+      requestType: this.state.selectedType,
       additionalInfo: {
         some_shit : title
       }
@@ -146,6 +148,7 @@ class KanbanTable extends Component {
   select(event) {
     console.log(event.target.innerText)
     let id = this.state.types.find(t => t.name == event.target.innerText).id
+    this.state.selectedType = id;
     this.props.history.push({
       pathname: `/kanban`,
       search: `typeId=${id}`
@@ -243,14 +246,14 @@ class KanbanTable extends Component {
                     id="body"
                   />
                 </FormGroup>
-                <FormGroup>
+                {/* <FormGroup>
                   <Label className="blackHeader">Тип запроса</Label>
                   <Input
                     type="text"
                     name="type_req"
                     id="type_req"
                   />
-                </FormGroup>
+                </FormGroup> */}
               </Form>
               </ModalBody>
               <ModalFooter>

@@ -27,7 +27,7 @@ class SignUpForm extends Component {
             signIn(values).then(response => {
                 inMemoryJWT.setToken(response.body);
                 props.history.push({
-                    pathname: `/user`,
+                    pathname: `/kanban`,
                 })
             })
         });

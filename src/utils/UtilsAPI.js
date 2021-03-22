@@ -138,6 +138,7 @@ export function filterByRequestType(requestTypeId) {
 }
 
 export function createNewRequest(modifiedData) {
+    console.log("hello world");
     console.log(JSON.stringify(modifiedData));
     return request({
         url: "requests/create",
